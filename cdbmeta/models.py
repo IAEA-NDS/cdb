@@ -81,7 +81,7 @@ class CDBRecord(DataMixin):
 
     atomic_number = models.PositiveSmallIntegerField('PKA atomic number',
         validators=[MinValueValidator(1), MaxValueValidator(118)])
-    energy = models.FloatField('PKA energy /eV',
+    energy = models.FloatField('PKA energy /keV',
                                validators=[MinValueValidator(0),])
     recoil = models.BooleanField('PKA by recoil?', default=True)
 
@@ -89,6 +89,7 @@ class CDBRecord(DataMixin):
     electronic_stopping_comment = models.CharField(max_length=500, blank=True)
     thermostat = models.BooleanField(default=False)
     thermostat_stopping_comment = models.CharField(max_length=500, blank=True)
+    input_filename = models.CharField(max_length=100)
     total_simulation_time = models.FloatField('Total simulation time /ps',
                             validators=[MinValueValidator(0),])
     initial_temperature = models.FloatField(validators=[MinValueValidator(0),])
