@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from sortedm2m.fields import SortedManyToManyField
+from lxml import etree
+from utils.xml import attach_element, attach_optional_element, true_false
 
 class Attribution(models.Model):
     name = models.CharField(max_length=100)
@@ -12,14 +14,33 @@ class Attribution(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def qualified_id(self):
+        return 'A{:d}'.format(self.pk)
+
+    def cdbml(self):
+        attribElement = etree.Element('attribution', id=self.qualified_id)
+        nameElement = etree.SubElement(attribElement, 'name')
+        nameElement.text = self.name
+        affiliationElement = etree.SubElement(attribElement, 'affiliation')
+        affiliationElement.text = self.affiliation
+        doiElement = etree.SubElement(attribElement, 'doi')
+        doiElement.text = self.publication_doi
+        attach_optional_element(attribElement, 'comments',
+                                self.general_comments)
+        attach_optional_element(attribElement, 'acknowledgements',
+                                self.acknowledgements)
+        return attribElement
 
 class LatticeParameters(models.Model):
-    a = models.FloatField(verbose_name='a /Å')
-    b = models.FloatField(verbose_name='b /Å')
-    c = models.FloatField(verbose_name='c /Å')
-    alpha = models.FloatField(verbose_name='α /deg')
-    beta = models.FloatField(verbose_name='β /deg')
-    gamma = models.FloatField(verbose_name='γ /deg')
+    # The leading spaces in verbose_name are a hack to stop Django from
+    # capitalizing these field names in their form labels
+    a = models.FloatField(verbose_name=' a /Å')
+    b = models.FloatField(verbose_name=' b /Å')
+    c = models.FloatField(verbose_name=' c /Å')
+    alpha = models.FloatField(verbose_name=' α /deg')
+    beta = models.FloatField(verbose_name=' β /deg')
+    gamma = models.FloatField(verbose_name=' γ /deg')
 
     class Meta:
         verbose_name_plural = 'Lattice parameters'
@@ -28,6 +49,16 @@ class LatticeParameters(models.Model):
         return 'a={:.3f} Å, b={:.3f} Å, c={:.3f} Å,'\
                ' α = {:.1f}°, β = {:.1f}°, γ = {:.1f}°'.format(
             self.a, self.b, self.c, self.alpha, self.beta, self.gamma)
+
+    def cdbml(self):
+        lpElement = etree.Element('lattice_parameters')
+        for s_ax in 'abc':
+            ax_elm = etree.SubElement(lpElement, s_ax, units='Å')
+            ax_elm.text = '{:.6f}'.format(getattr(self, s_ax))
+        for s_ang in ('alpha', 'beta', 'gamma'):
+            ang_elm = etree.SubElement(lpElement, s_ang, units='deg')
+            ang_elm.text = '{:.6f}'.format(getattr(self, s_ang))
+        return lpElement
 
 
 class Material(models.Model):
@@ -52,6 +83,15 @@ class Material(models.Model):
     def __str__(self):
         return '{} ({})'.format(self.chemical_formula, self.structure)
 
+    def cdbml(self):
+        matElement = etree.Element('material')
+        formulaElement = etree.SubElement(matElement, 'formula')
+        formulaElement.text = self.chemical_formula
+        structureElement = etree.SubElement(matElement, 'structure')
+        structureElement.text = self.structure
+        matElement.append(self.lattice_parameters.cdbml())
+        return matElement
+
 
 class DataColumn(models.Model):
     name = models.CharField(max_length=100)
@@ -67,6 +107,8 @@ class DataMixin(models.Model):
     filename = models.CharField(max_length=100)
     initial_configuration_filename=models.CharField(max_length=100, blank=True)
     initial_configuration_comments = models.TextField(blank=True)
+    nheader = models.PositiveSmallIntegerField('Number of header rows',
+                                               default=0)
     additional_columns = SortedManyToManyField(DataColumn, blank=True)
 
     class Meta:
@@ -88,7 +130,7 @@ class CDBRecord(DataMixin):
     electronic_stopping = models.BooleanField(default=False)
     electronic_stopping_comment = models.CharField(max_length=500, blank=True)
     thermostat = models.BooleanField(default=False)
-    thermostat_stopping_comment = models.CharField(max_length=500, blank=True)
+    thermostat_comment = models.CharField(max_length=500, blank=True)
     input_filename = models.CharField(max_length=100)
     total_simulation_time = models.FloatField('Total simulation time /ps',
                             validators=[MinValueValidator(0),])
@@ -106,3 +148,77 @@ class CDBRecord(DataMixin):
         return '{}: {} ({}), {} eV; {} ps: {}'.format(self.attribution.name,
             self.material.chemical_formula, self.material.structure,
             self.energy, self.total_simulation_time, self.filename)
+
+    @property
+    def qualified_id(self):
+        return 'R{:d}'.format(self.pk)
+
+    def cdbml(self):
+        cdbrecordElement = etree.Element('cdbrecord', id=self.qualified_id)
+        cdbrecordElement.append(self.attribution.cdbml())
+        cdbrecordElement.append(self.material.cdbml())
+        attach_element(cdbrecordElement, 'has_surface', self.has_surface,
+                      true_false)
+        attach_element(cdbrecordElement, 'initially_perfect',
+                       self.initially_perfect, true_false)
+        attach_element(cdbrecordElement, 'PKA_atomic_number',
+                       self.atomic_number, '{:d}')
+        PKAElement = etree.SubElement(cdbrecordElement, 'PKA')
+        attach_element(PKAElement, 'energy',
+                       self.energy, '{:f}', attrs={'units': 'keV'})
+        attach_element(PKAElement, 'recoil',
+                       self.recoil, true_false)
+        attach_element(cdbrecordElement, 'electronic_stopping',
+                       self.electronic_stopping, true_false)
+        attach_optional_element(cdbrecordElement,'electronic_stopping_comment',
+                        self.electronic_stopping_comment)
+        attach_element(cdbrecordElement, 'thermostat',
+                       self.thermostat, true_false)
+        attach_optional_element(cdbrecordElement,'thermostat_comment',
+                        self.thermostat_comment)
+        attach_element(cdbrecordElement, 'input_filename', self.input_filename)
+        attach_element(cdbrecordElement, 'simulation_time',
+                   self.total_simulation_time, '{:.3f}', attrs={'units': 'ps'})
+        attach_element(cdbrecordElement, 'initial_temperature',
+                   self.initial_temperature, '{:.2f}', attrs={'units': 'K'})
+        PEElement = etree.SubElement(cdbrecordElement, 'interatomic_potential')
+        attach_element(PEElement, 'filename',
+                       self.interatomic_potential_filename)
+        attach_optional_element(PEElement, 'comment',
+                       self.interatomic_potential_comment)
+        codeElement = etree.SubElement(cdbrecordElement, 'code')
+        attach_element(codeElement, 'name', self.code_name)
+        attach_element(codeElement, 'version', self.code_version)
+        if (self.initial_configuration_filename or
+                    self.initial_configuration_comments):
+            initial_configElement = etree.SubElement(cdbrecordElement,
+                                                     'initial_configuration')
+            attach_optional_element(initial_configElement, 'filename',
+                                    self.initial_configuration_filename)
+            attach_optional_element(initial_configElement, 'comments',
+                                    self.initial_configuration_comments)
+        dataElement = etree.SubElement(cdbrecordElement, 'data')
+        attach_element(dataElement, 'filename', self.filename)
+        attach_element(dataElement, 'nheader', self.nheader, '{:d}')
+        colsElement = etree.SubElement(dataElement, 'columns')
+
+        def column_element(name, units=None, description=None):
+            colElement = etree.Element('column')
+            attach_element(colElement, 'name', name)
+            attach_optional_element(colElement, 'units', units)
+            attach_optional_element(colElement, 'description', description)
+            return colElement
+
+        colsElement.append(column_element('Element Symbol'))
+        colsElement.append(column_element('x', 'Å'))
+        colsElement.append(column_element('y', 'Å'))
+        colsElement.append(column_element('z', 'Å'))
+        for column in self.additional_columns.all():
+            colsElement.append(column_element(column.name,
+                                    column.units, column.description))
+
+        return cdbrecordElement
+
+    def as_cdbml(self):
+        return etree.tostring(self.cdbml(), pretty_print=True,
+                              encoding='unicode')
