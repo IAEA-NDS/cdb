@@ -4,7 +4,7 @@ from sortedm2m.fields import SortedManyToManyField
 from miniclerval.models import Person
 from lxml import etree
 from utils.xml import attach_element, attach_optional_element, true_false
-from cdb.settings import SITE_ROOT
+from cdb.settings import SITE_ROOT_URL
 
 class Attribution(models.Model):
     person = models.ForeignKey(Person)
@@ -232,7 +232,7 @@ class CDBRecord(DataMixin):
 
         if xml2html:
             s.append('<?xml-stylesheet type="text/xsl" href='
-                     '"{}/static/xsl/cdbml2html.xsl"?>'.format(SITE_ROOT))
+                     '"{}/static/xsl/cdbml2html.xsl"?>'.format(SITE_ROOT_URL))
         s.extend([
             '<cdbml version="1.0" xmlns="https://www-amdis.iaea.org/cdbml">',
             cdbml,
