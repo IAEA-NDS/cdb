@@ -13,7 +13,7 @@ def attach_element(elm, name, value, fmt=None, attrs={}):
         subElm.text = value
 
 def attach_optional_element(elm, name, value, fmt=None):
-    if value is None:
+    if value in (None, ''):
         return
     attach_element(elm, name, value, fmt=None)
 

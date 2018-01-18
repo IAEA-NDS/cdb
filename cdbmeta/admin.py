@@ -13,8 +13,4 @@ admin.site.register(DataColumn)
 class CDBRecordAdmin(admin.ModelAdmin):
     model = CDBRecord
 
-    formfield_overrides = {
-        
-    }
-
 admin.site.register(CDBRecord, CDBRecordAdmin)

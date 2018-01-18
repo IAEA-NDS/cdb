@@ -1,18 +1,19 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from sortedm2m.fields import SortedManyToManyField
+from miniclerval.models import Person
 from lxml import etree
 from utils.xml import attach_element, attach_optional_element, true_false
+from cdb.settings import SITE_ROOT
 
 class Attribution(models.Model):
-    name = models.CharField(max_length=100)
-    affiliation = models.CharField(max_length=500)
+    person = models.ForeignKey(Person)
     publication_doi = models.CharField(max_length=50)
     general_comments = models.TextField(blank=True)
     acknowledgements = models.TextField(blank=True)
 
     def __str__(self):
-        return self.name
+        return '{}: {}'.format(self.person.name, self.publication_doi)
 
     @property
     def qualified_id(self):
@@ -21,9 +22,9 @@ class Attribution(models.Model):
     def cdbml(self):
         attribElement = etree.Element('attribution', id=self.qualified_id)
         nameElement = etree.SubElement(attribElement, 'name')
-        nameElement.text = self.name
+        nameElement.text = self.person.name
         affiliationElement = etree.SubElement(attribElement, 'affiliation')
-        affiliationElement.text = self.affiliation
+        affiliationElement.text = self.person.institution.name
         doiElement = etree.SubElement(attribElement, 'doi')
         doiElement.text = self.publication_doi
         attach_optional_element(attribElement, 'comments',
@@ -145,7 +146,8 @@ class CDBRecord(DataMixin):
         verbose_name_plural = 'CDB records'
 
     def __str__(self):
-        return '{}: {} ({}), {} eV; {} ps: {}'.format(self.attribution.name,
+        return '{}: {} ({}), {} eV; {} ps: {}'.format(
+            self.attribution.person.name,
             self.material.chemical_formula, self.material.structure,
             self.energy, self.total_simulation_time, self.filename)
 
@@ -219,6 +221,21 @@ class CDBRecord(DataMixin):
 
         return cdbrecordElement
 
-    def as_cdbml(self):
-        return etree.tostring(self.cdbml(), pretty_print=True,
-                              encoding='unicode')
+    def as_cdbml(self, standalone=True, xml2html=False):
+        cdbml = etree.tostring(self.cdbml(), pretty_print=True,
+                               encoding='unicode')
+
+        if not standalone:
+            return cdbml
+
+        s = ['<?xml version="1.0" encoding="utf-8" ?>']
+
+        if xml2html:
+            s.append('<?xml-stylesheet type="text/xsl" href='
+                     '"{}/static/xsl/cdbml2html.xsl"?>'.format(SITE_ROOT))
+        s.extend([
+            '<cdbml version="1.0" xmlns="https://www-amdis.iaea.org/cdbml">',
+            cdbml,
+            '</cdbml>'])
+            
+        return '\n'.join(s)

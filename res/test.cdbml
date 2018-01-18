@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<cdbml version="1.0" xmlns="https://www-amdis.iaea.org/cdbml">
+<cdbrecord id="R1">
+  <attribution id="A2">
+    <name>Andrea SAND</name>
+    <affiliation>U. &lt; Hel &amp;</affiliation>
+    <doi>10.1209/0295-5075/103/46003</doi>
+    <acknowledgements>This work, supported by the European Communities under the contract of Association between EURATOM/Tekes, was carried out within the framework of the European Fusion Development Agreement. &#13;
+&#13;
+The views and opinions expressed herein do not necessarily reflect those of the European Commission.&#13;
+&#13;
+Grants for computer time from the Centre for Scientific Computing in Espoo, Finland, are gratefully acknowledged.</acknowledgements>
+  </attribution>
+  <material>
+    <formula>W</formula>
+    <structure>bcc</structure>
+    <lattice_parameters>
+      <a units="Å">3.165200</a>
+      <b units="Å">3.165200</b>
+      <c units="Å">3.165200</c>
+      <alpha units="deg">90.000000</alpha>
+      <beta units="deg">90.000000</beta>
+      <gamma units="deg">90.000000</gamma>
+    </lattice_parameters>
+  </material>
+  <has_surface>false</has_surface>
+  <initially_perfect>true</initially_perfect>
+  <PKA_atomic_number>74</PKA_atomic_number>
+  <PKA>
+    <energy units="keV">150.000000</energy>
+    <recoil>true</recoil>
+  </PKA>
+  <electronic_stopping>true</electronic_stopping>
+  <electronic_stopping_comment>for all atoms with K.E. &gt;10 eV; see publication</electronic_stopping_comment>
+  <thermostat>true</thermostat>
+  <thermostat_comment>Berendsen on boundaries, 0 K; see publication</thermostat_comment>
+  <input_filename>default-filename</input_filename>
+  <simulation_time units="ps">40.000</simulation_time>
+  <initial_temperature units="K">0.00</initial_temperature>
+  <interatomic_potential>
+    <filename>eam.W.W.in</filename>
+  </interatomic_potential>
+  <code>
+    <name>PARCAS</name>
+    <version>V4.07b</version>
+  </code>
+  <data>
+    <filename>fpos_casc.xyz-150-40</filename>
+    <nheader>0</nheader>
+    <columns>
+      <column>
+        <name>Element Symbol</name>
+      </column>
+      <column>
+        <name>x</name>
+        <units>Å</units>
+      </column>
+      <column>
+        <name>y</name>
+        <units>Å</units>
+      </column>
+      <column>
+        <name>z</name>
+        <units>Å</units>
+      </column>
+      <column>
+        <name>PE</name>
+        <units>eV</units>
+        <description>Atom potential energy</description>
+      </column>
+    </columns>
+  </data>
+</cdbrecord>
+
+</cdbml>

@@ -30,7 +30,9 @@ INSTALLED_APPS = [
 
     'debug_toolbar',
     'sortedm2m',
+    'django_countries',
 
+    'miniclerval',
     'cdbmeta',
 ]
 
