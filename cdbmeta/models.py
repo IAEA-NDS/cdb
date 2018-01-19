@@ -136,7 +136,8 @@ class CDBRecord(DataMixin):
     total_simulation_time = models.FloatField('Total simulation time /ps',
                             validators=[MinValueValidator(0),])
     initial_temperature = models.FloatField(validators=[MinValueValidator(0),])
-    interatomic_potential_filename = models.CharField(max_length=100)
+    interatomic_potential_filename = models.CharField(max_length=100,
+                                                      blank=True)
     interatomic_potential_comment = models.TextField(blank=True)
     code_name = models.CharField(max_length=100)
     code_version = models.CharField(max_length=10)
@@ -183,11 +184,14 @@ class CDBRecord(DataMixin):
                    self.total_simulation_time, '{:.3f}', attrs={'units': 'ps'})
         attach_element(cdbrecordElement, 'initial_temperature',
                    self.initial_temperature, '{:.2f}', attrs={'units': 'K'})
-        PEElement = etree.SubElement(cdbrecordElement, 'interatomic_potential')
-        attach_element(PEElement, 'filename',
-                       self.interatomic_potential_filename)
-        attach_optional_element(PEElement, 'comment',
-                       self.interatomic_potential_comment)
+        if (self.interatomic_potential_filename or
+            self.interatomic_potential_comment):
+            PEElement = etree.SubElement(cdbrecordElement,
+                                         'interatomic_potential')
+            attach_optional_element(PEElement, 'filename',
+                           self.interatomic_potential_filename)
+            attach_optional_element(PEElement, 'comment',
+                           self.interatomic_potential_comment)
         codeElement = etree.SubElement(cdbrecordElement, 'code')
         attach_element(codeElement, 'name', self.code_name)
         attach_element(codeElement, 'version', self.code_version)

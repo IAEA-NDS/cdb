@@ -117,7 +117,7 @@
     <xs:element name="input_filename" type="xs:string" maxOccurs="1"/>
     <xs:element name="simulation_time" type="physical_quantityType" maxOccurs="1" />
     <xs:element name="initial_temperature" type="physical_quantityType" maxOccurs="1"/>
-    <xs:element name="interatomic_potential" type="interatomic_potentialType" maxOccurs="1"/>
+    <xs:element name="interatomic_potential" type="interatomic_potentialType" minOccurs="0"/>
     <xs:element name="code" type="codeType" maxOccurs="1"/>
     <xs:element name="data" type="dataType" maxOccurs="1"/>
     </xs:sequence>
