@@ -135,7 +135,8 @@ class CDBRecord(DataMixin):
     input_filename = models.CharField(max_length=100)
     total_simulation_time = models.FloatField('Total simulation time /ps',
                             validators=[MinValueValidator(0),])
-    initial_temperature = models.FloatField(validators=[MinValueValidator(0),])
+    initial_temperature = models.FloatField('Initial temperature /K',
+                                            validators=[MinValueValidator(0),])
     interatomic_potential_filename = models.CharField(max_length=100,
                                                       blank=True)
     interatomic_potential_comment = models.TextField(blank=True)
