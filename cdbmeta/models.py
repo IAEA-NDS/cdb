@@ -105,7 +105,7 @@ class DataColumn(models.Model):
         return self.name
 
 class DataMixin(models.Model):
-    filename = models.CharField(max_length=100)
+    archive_name = models.CharField(max_length=100)
     initial_configuration_filename=models.CharField(max_length=100, blank=True)
     initial_configuration_comments = models.TextField(blank=True)
     nheader = models.PositiveSmallIntegerField('Number of header rows',
@@ -132,7 +132,7 @@ class CDBRecord(DataMixin):
     electronic_stopping_comment = models.CharField(max_length=500, blank=True)
     thermostat = models.BooleanField(default=False)
     thermostat_comment = models.CharField(max_length=500, blank=True)
-    input_filename = models.CharField(max_length=100)
+    input_filename = models.CharField(max_length=100, blank=True)
     total_simulation_time = models.FloatField('Total simulation time /ps',
                             validators=[MinValueValidator(0),])
     initial_temperature = models.FloatField('Initial temperature /K',
@@ -151,7 +151,7 @@ class CDBRecord(DataMixin):
         return '{}: {} ({}), {} eV; {} ps: {}'.format(
             self.attribution.person.name,
             self.material.chemical_formula, self.material.structure,
-            self.energy, self.total_simulation_time, self.filename)
+            self.energy, self.total_simulation_time, self.archive_name)
 
     @property
     def qualified_id(self):
@@ -205,7 +205,7 @@ class CDBRecord(DataMixin):
             attach_optional_element(initial_configElement, 'comments',
                                     self.initial_configuration_comments)
         dataElement = etree.SubElement(cdbrecordElement, 'data')
-        attach_element(dataElement, 'filename', self.filename)
+        attach_element(dataElement, 'archive_name', self.archive_name)
         attach_element(dataElement, 'nheader', self.nheader, '{:d}')
         colsElement = etree.SubElement(dataElement, 'columns')
 
