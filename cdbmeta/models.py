@@ -180,7 +180,8 @@ class CDBRecord(DataMixin):
                        self.thermostat, true_false)
         attach_optional_element(cdbrecordElement,'thermostat_comment',
                         self.thermostat_comment)
-        attach_element(cdbrecordElement, 'input_filename', self.input_filename)
+        attach_optional_element(cdbrecordElement, 'input_filename',
+                        self.input_filename)
         attach_element(cdbrecordElement, 'simulation_time',
                    self.total_simulation_time, '{:.3f}', attrs={'units': 'ps'})
         attach_element(cdbrecordElement, 'initial_temperature',

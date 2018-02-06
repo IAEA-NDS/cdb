@@ -19,6 +19,9 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'cdbmeta/', include('cdbmeta.urls')),
+
+    url(r'cdbdata/', include('cdbdata.urls')),
+
 ]
 
 

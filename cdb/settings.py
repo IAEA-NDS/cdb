@@ -31,9 +31,11 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'sortedm2m',
     'django_countries',
+    'chunked_upload',
 
     'miniclerval',
     'cdbmeta',
+    'cdbdata',
 ]
 
 MIDDLEWARE = [
