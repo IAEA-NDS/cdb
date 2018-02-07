@@ -5,10 +5,18 @@ from django.views.generic.base import TemplateView
 from chunked_upload.views import ChunkedUploadView, ChunkedUploadCompleteView
 
 from .models import MyChunkedUpload
+import os
+from cdb.settings import MEDIA_ROOT, CHUNKED_UPLOAD_PATH
+upload_dir = os.path.join(MEDIA_ROOT, CHUNKED_UPLOAD_PATH)
 
 
 class ChunkedUploadDemo(TemplateView):
     template_name = 'cdbdata/chunked_upload.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['file_list'] = os.listdir(upload_dir)
+        return context
 
 
 class MyChunkedUploadView(ChunkedUploadView):

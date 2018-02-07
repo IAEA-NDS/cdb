@@ -19,16 +19,25 @@
 <body>
 
   <h1 class="title">
-    django-chunked-upload
+    CDB Data Upload
   </h1>
   <p>
-    See the code on github: <a href="https://github.com/juliomalegria/django-chunked-upload" target="_blank">django-chunked-upload</a>.
+    Upload a file here.
   </p>
   {% csrf_token %}
   <input id="chunked_upload" type="file" name="the_file">
 
   <p id="progress"></p>
-  <div id="messages" style='height: 400px; overflow: scroll;'></div>
+  <div id="messages" style='height: 40px; overflow: scroll;'></div>
+
+  <div>
+     <h2>Uploaded Files</h2>
+     <ul>
+     {% for file in file_list %}
+         <li>{{ file }}</li>
+     {% endfor %}
+     </ul>
+  </div>
 
   <script type="text/javascript">
     var md5 = "",
