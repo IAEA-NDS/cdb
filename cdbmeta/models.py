@@ -108,9 +108,8 @@ class DataMixin(models.Model):
     archive_name = models.CharField(max_length=100)
     initial_configuration_filename=models.CharField(max_length=100, blank=True)
     initial_configuration_comments = models.TextField(blank=True)
-    nheader = models.PositiveSmallIntegerField('Number of header rows',
-                                               default=0)
     additional_columns = SortedManyToManyField(DataColumn, blank=True)
+    comments = models.TextField(blank=True)
 
     class Meta:
         abstract=True
@@ -207,8 +206,9 @@ class CDBRecord(DataMixin):
                                     self.initial_configuration_comments)
         dataElement = etree.SubElement(cdbrecordElement, 'data')
         attach_element(dataElement, 'archive_name', self.archive_name)
-        attach_element(dataElement, 'nheader', self.nheader, '{:d}')
         colsElement = etree.SubElement(dataElement, 'columns')
+        attach_optional_element(cdbrecordElement, 'comments',
+                                self.comments)
 
         def column_element(name, units=None, description=None):
             colElement = etree.Element('column')
