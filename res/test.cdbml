@@ -46,7 +46,6 @@ Grants for computer time from the Centre for Scientific Computing in Espoo, Finl
   </code>
   <data>
     <filename>fpos_casc.xyz-150-40</filename>
-    <nheader>0</nheader>
     <columns>
       <column>
         <name>Element Symbol</name>
@@ -69,6 +68,7 @@ Grants for computer time from the Centre for Scientific Computing in Espoo, Finl
         <description>Atom potential energy</description>
       </column>
     </columns>
+    <comments>Here is a comment.</comments>
   </data>
 </cdbrecord>
 
