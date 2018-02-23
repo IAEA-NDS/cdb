@@ -33,8 +33,8 @@
   <div>
      <h2>Uploaded Files</h2>
      <ul>
-     {% for file in file_list %}
-         <li>{{ file }}</li>
+     {% for file, filesize in file_list %}
+         <li>{{ file }} ({{ filesize|filesizeformat }})</li>
      {% endfor %}
      </ul>
   </div>

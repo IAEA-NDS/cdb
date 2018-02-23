@@ -6,6 +6,7 @@ from chunked_upload.views import ChunkedUploadView, ChunkedUploadCompleteView
 
 from .models import MyChunkedUpload
 import os
+from .templatetags.cdbdata_utils import filesize
 from cdb.settings import MEDIA_ROOT, CHUNKED_UPLOAD_PATH
 upload_dir = os.path.join(MEDIA_ROOT, CHUNKED_UPLOAD_PATH)
 
@@ -15,7 +16,12 @@ class ChunkedUploadDemo(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['file_list'] = os.listdir(upload_dir)
+        file_list = os.listdir(upload_dir)
+        files_and_sizes = []
+        for filename in file_list:
+            files_and_sizes.append((filename, filesize(os.path.join(upload_dir,
+                                                      filename))))
+        context['file_list'] = files_and_sizes
         return context
 
 
