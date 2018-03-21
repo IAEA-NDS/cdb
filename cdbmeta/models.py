@@ -207,7 +207,7 @@ class CDBRecord(DataMixin):
         dataElement = etree.SubElement(cdbrecordElement, 'data')
         attach_element(dataElement, 'archive_name', self.archive_name)
         colsElement = etree.SubElement(dataElement, 'columns')
-        attach_optional_element(cdbrecordElement, 'comments',
+        attach_optional_element(dataElement, 'comments',
                                 self.comments)
 
         def column_element(name, units=None, description=None):

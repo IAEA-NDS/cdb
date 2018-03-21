@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <cdbml version="1.0" xmlns="https://www-amdis.iaea.org/cdbml">
 <cdbrecord id="R1">
   <attribution id="A2">
     <name>Andrea SAND</name>
-    <affiliation>U. &lt; Hel &amp;</affiliation>
+    <affiliation>Department of Physics, University of Helsinki</affiliation>
     <doi>10.1209/0295-5075/103/46003</doi>
-    <acknowledgements>This work, supported by the European Communities under the contract of Association between EURATOM/Tekes, was carried out within the framework of the European Fusion Development Agreement. &#13;
-&#13;
-The views and opinions expressed herein do not necessarily reflect those of the European Commission.&#13;
-&#13;
+    <acknowledgements>This work, supported by the European Communities under the contract of Association between EURATOM/Tekes, was carried out within the framework of the European Fusion Development Agreement. 
+
+The views and opinions expressed herein do not necessarily reflect those of the European Commission.
+
 Grants for computer time from the Centre for Scientific Computing in Espoo, Finland, are gratefully acknowledged.</acknowledgements>
   </attribution>
   <material>
@@ -27,14 +27,13 @@ Grants for computer time from the Centre for Scientific Computing in Espoo, Finl
   <initially_perfect>true</initially_perfect>
   <PKA_atomic_number>74</PKA_atomic_number>
   <PKA>
-    <energy units="keV">150.000000</energy>
+    <energy units="keV">50.000000</energy>
     <recoil>true</recoil>
   </PKA>
   <electronic_stopping>true</electronic_stopping>
   <electronic_stopping_comment>for all atoms with K.E. &gt;10 eV; see publication</electronic_stopping_comment>
   <thermostat>true</thermostat>
-  <thermostat_comment>Berendsen on boundaries, 0 K; see publication</thermostat_comment>
-  <input_filename>default-filename</input_filename>
+  <thermostat_comment>on borders, 0 Kelvin; see publication</thermostat_comment>
   <simulation_time units="ps">40.000</simulation_time>
   <initial_temperature units="K">0.00</initial_temperature>
   <interatomic_potential>
@@ -42,10 +41,10 @@ Grants for computer time from the Centre for Scientific Computing in Espoo, Finl
   </interatomic_potential>
   <code>
     <name>PARCAS</name>
-    <version>V4.07b</version>
+    <version>4.0</version>
   </code>
   <data>
-    <archive_name>fpos_casc.xyz-150-40</archive_name>
+    <archive_name>001-fpos-50.tar.bz2</archive_name>
     <columns>
       <column>
         <name>Element Symbol</name>
@@ -62,14 +61,9 @@ Grants for computer time from the Centre for Scientific Computing in Espoo, Finl
         <name>z</name>
         <units>Å</units>
       </column>
-      <column>
-        <name>PE</name>
-        <units>eV</units>
-        <description>Atom potential energy</description>
-      </column>
     </columns>
-    <comments>Here is a comment.</comments>
   </data>
+  <comments>This data set is provided as part of the IAEA Challenge: "Modelling Damage in a Fusion Reactor", April 2018 – June 2018. See https://challenge.iaea.org/ for more details.</comments>
 </cdbrecord>
 
 </cdbml>
