@@ -96,9 +96,9 @@
 
 <xs:complexType name="dataType">
     <xs:sequence>
-        <xs:element name="filename" type="xs:string" maxOccurs="1" />
-        <xs:element name="nheader" type="xs:nonNegativeInteger" maxOccurs="1" />
+        <xs:element name="archive_name" type="xs:string" maxOccurs="1" />
         <xs:element name="columns" type="columnsType" maxOccurs="1" />
+        <xs:element name="comments" type="xs:string" minOccurs="0" />
     </xs:sequence>
 </xs:complexType>
 
@@ -114,7 +114,7 @@
     <xs:element name="electronic_stopping_comment" type="xs:string" minOccurs="0" />
     <xs:element name="thermostat" type="true_falseType" maxOccurs="1" />
     <xs:element name="thermostat_comment" type="xs:string" minOccurs="0" />
-    <xs:element name="input_filename" type="xs:string" maxOccurs="1"/>
+    <xs:element name="input_filename" type="xs:string" minOccurs="0"/>
     <xs:element name="simulation_time" type="physical_quantityType" maxOccurs="1" />
     <xs:element name="initial_temperature" type="physical_quantityType" maxOccurs="1"/>
     <xs:element name="interatomic_potential" type="interatomic_potentialType" minOccurs="0"/>

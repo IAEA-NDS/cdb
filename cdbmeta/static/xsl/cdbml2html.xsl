@@ -57,7 +57,7 @@
     <p>Code: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:code/c:name" /> Version: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:code/c:version" /></p>
 
     <h2>Data</h2>
-    <p>xyz filename: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:data/c:filename" /></p>
+    <p>xyz archive_name: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:data/c:archive_name" /></p>
 
     <h3>Columns</h3>
     <table>
