@@ -1,0 +1,15 @@
+.content-container {
+    max-width: 800px;
+}
+
+.card {
+    margin-bottom: 40px;
+}
+
+.card-header {
+    background-color: #a0d0a0;
+}
+
+.value {
+    font-weight: bold;
+}

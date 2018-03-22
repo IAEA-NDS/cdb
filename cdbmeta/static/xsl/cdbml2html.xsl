@@ -4,11 +4,20 @@
 
 <xsl:template match="/">
   <html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+        <link rel="stylesheet" href="/static/cdbmeta/css/custom.css" />
+    </head>
     <body>
-    <h1>CDB Record <xsl:value-of select="/c:cdbml/c:cdbrecord/@id"/></h1>
+
+<div class="container content-container">
+
+    <h1 class="text-center">CDB Record <xsl:value-of select="/c:cdbml/c:cdbrecord/@id"/></h1>
 
     <xsl:for-each select="/c:cdbml/c:cdbrecord/c:attribution">
-    <h2>Attribution <xsl:value-of select="@id"/></h2>
+    <div class="card">
+    <div class="card-header"><h2>Attribution <xsl:value-of select="@id"/></h2></div>
+    <div class="card-body">
         <h3>Contributor</h3>
         <p><xsl:value-of select="c:name"/>, <xsl:value-of select="c:affiliation"/></p>
         <h3>Publication</h3>
@@ -21,46 +30,65 @@
 
         <h3>Acknowledgements</h3>
         <p><xsl:value-of select="c:acknowledgements"/></p>
+
+    </div>
+    </div>
     </xsl:for-each>
 
     <xsl:for-each select="/c:cdbml/c:cdbrecord/c:material">
-        <h2>Material</h2>
-        <p>Formula: <xsl:value-of select="c:formula"/></p>
-        <p>Structure: <xsl:value-of select="c:structure"/></p>
+        <div class="card">
+        <div class="card-header"><h2>Material</h2></div>
+        <div class="card-body">
+        <p>Formula: <span class="value"><xsl:value-of select="c:formula"/></span></p>
+        <p>Structure: <span class="value"><xsl:value-of select="c:structure"/></span></p>
         <xsl:apply-templates select="c:lattice_parameters"/>
 
+        <p>Simulation includes surface? <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:has_surface" /></span></p>
+        <p>Initially perfect crystal configuration? <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:initially_perfect" /></span></p>
+        </div>
+        </div>
+
     </xsl:for-each>
-    <p>Simulation includes surface? <xsl:value-of select="/c:cdbml/c:cdbrecord/c:has_surface" /></p>
-    <p>Initially perfect crystal configuration? <xsl:value-of select="/c:cdbml/c:cdbrecord/c:initially_perfect" /></p>
 
-    <h2>PKA</h2>
-    <p>PKA atomic number: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:PKA_atomic_number" /></p>
-    <p>PKA energy: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:PKA/c:energy" />&#160;<xsl:value-of select="/c:cdbml/c:cdbrecord/c:PKA/c:energy/@units" /></p>
-    <p>PKA by recoil? <xsl:value-of select="/c:cdbml/c:cdbrecord/c:PKA/c:recoil" /></p>
+    <div class="card">
+    <div class="card-header"><h2>PKA</h2></div>
+    <div class="card-body">
+    <p>PKA atomic number: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:PKA_atomic_number" /></span></p>
+    <p>PKA energy: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:PKA/c:energy" />&#160;<xsl:value-of select="/c:cdbml/c:cdbrecord/c:PKA/c:energy/@units" /></span></p>
+    <p>PKA by recoil? <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:PKA/c:recoil" /></span></p>
+    </div>
+    </div>
 
-    <h2>Simulation Details</h2>
-    <p>Electronic stopping included? <xsl:value-of select="/c:cdbml/c:cdbrecord/c:electronic_stopping" /></p>
-    <p>Electronic stopping comments: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:electronic_stopping_comment" /></p>
+    <div class="card">
+    <div class="card-header"><h2>Simulation Details</h2></div>
+    <div class="card-body">
+    <p>Electronic stopping included? <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:electronic_stopping" /></span></p>
+    <p>Electronic stopping comments: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:electronic_stopping_comment" /></span></p>
 
-    <p>Thermostat? <xsl:value-of select="/c:cdbml/c:cdbrecord/c:thermostat" /></p>
-    <p>Thermostat comments: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:thermostat_comment" /></p>
+    <p>Thermostat? <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:thermostat" /></span></p>
+    <p>Thermostat comments: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:thermostat_comment" /></span></p>
 
-    <p>Input filename: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:input_filename" /></p>
+    <p>Input filename: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:input_filename" /></span></p>
 
-    <p>Simulation time: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:simulation_time" />&#160;<xsl:value-of select="/c:cdbml/c:cdbrecord/c:simulation_time/@units" /></p>
+    <p>Simulation time: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:simulation_time" />&#160;<xsl:value-of select="/c:cdbml/c:cdbrecord/c:simulation_time/@units" /></span></p>
 
-    <p>Initial temperature: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:initial_temperature" />&#160;<xsl:value-of select="/c:cdbml/c:cdbrecord/c:initial_temperature/@units" /></p>
+    <p>Initial temperature: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:initial_temperature" />&#160;<xsl:value-of select="/c:cdbml/c:cdbrecord/c:initial_temperature/@units" /></span></p>
 
-    <p>Interatomic potential filename: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:filename" /></p>
-    <p>Interatomic potential comment: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:comment" /></p>
+    <p>Interatomic potential filename: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:filename" /></span></p>
+    <p>Interatomic potential comment: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:comment" /></span></p>
 
-    <p>Code: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:code/c:name" /> Version: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:code/c:version" /></p>
+    <p>Code: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:code/c:name" /> Version: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:code/c:version" /></span></p>
 
-    <h2>Data</h2>
-    <p>xyz archive_name: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:data/c:archive_name" /></p>
+    </div>
+    </div>
+
+    <div class="card">
+    <div class="card-header"><h2>Data</h2></div>
+    <div class="card-body">
+    <p>Data archive name: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:data/c:archive_name" /></p>
 
     <h3>Columns</h3>
-    <table>
+    <table class="table">
     <thead><tr><th>Position</th><th>Name</th><th>Units</th></tr></thead>
     <tbody>
     <xsl:for-each select="/c:cdbml/c:cdbrecord/c:data/c:columns/c:column">
@@ -72,7 +100,11 @@
     </xsl:for-each>
     </tbody>
     </table>
+    </div>
+    </div>
 
+
+    </div>
     </body>
   </html>
 </xsl:template>
@@ -84,7 +116,7 @@
         <i>c</i> = <xsl:value-of select="c:c"/>&#160;<xsl:value-of select="c:c/@units"/>.<br/>
         <i>α</i> = <xsl:value-of select="c:alpha"/><xsl:choose><xsl:when test="c:alpha/@units='deg'">°</xsl:when><xsl:otherwise>&#160;<xsl:value-of select="c:alpha/@units"/></xsl:otherwise></xsl:choose>,
         <i>β</i> = <xsl:value-of select="c:beta"/><xsl:choose><xsl:when test="c:beta/@units='deg'">°</xsl:when><xsl:otherwise>&#160;<xsl:value-of select="c:beta/@units"/></xsl:otherwise></xsl:choose>,
-        <i>γ</i> = <xsl:value-of select="c:gamma"/><xsl:choose><xsl:when test="c:gamma/@units='deg'">°</xsl:when><xsl:otherwise>&#160;<xsl:value-of select="c:gamma/@units"/></xsl:otherwise></xsl:choose>,
+        <i>γ</i> = <xsl:value-of select="c:gamma"/><xsl:choose><xsl:when test="c:gamma/@units='deg'">°</xsl:when><xsl:otherwise>&#160;<xsl:value-of select="c:gamma/@units"/></xsl:otherwise></xsl:choose>.
     </p>
 </xsl:template>
 
