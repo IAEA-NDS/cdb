@@ -11,5 +11,5 @@ django.setup()
 
 from cdbmeta.models import CDBRecord
 
-cdb_record = CDBRecord.objects.get(pk=1)
+cdb_record = CDBRecord.objects.get(pk=2)
 print(cdb_record.as_cdbml())

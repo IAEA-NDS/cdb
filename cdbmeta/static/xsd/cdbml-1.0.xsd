@@ -65,6 +65,22 @@
     <xs:attribute name="id" type="xs:string" />
 </xs:complexType>
 
+<xs:complexType name="box_orientationType">
+    <xs:sequence>
+        <xs:element name="X_orientation" type="xs:string" maxOccurs="1" />
+        <xs:element name="Y_orientation" type="xs:string" maxOccurs="1" />
+        <xs:element name="Z_orientation" type="xs:string" maxOccurs="1" />
+    </xs:sequence>
+</xs:complexType>
+<xs:complexType name="simulation_boxType">
+    <xs:sequence>
+        <xs:element name="box_X_length" type="physical_quantityType" maxOccurs="1" />
+        <xs:element name="box_Y_length" type="physical_quantityType" maxOccurs="1" />
+        <xs:element name="box_Z_length" type="physical_quantityType" maxOccurs="1" />
+        <xs:element name="box_orientation" type="box_orientationType" minOccurs="0" />
+    </xs:sequence>
+</xs:complexType>
+
 <xs:complexType name="interatomic_potentialType">
     <xs:sequence>
         <xs:element name="filename" type="xs:string" maxOccurs="1" />
@@ -117,6 +133,9 @@
     <xs:element name="input_filename" type="xs:string" minOccurs="0"/>
     <xs:element name="simulation_time" type="physical_quantityType" maxOccurs="1" />
     <xs:element name="initial_temperature" type="physical_quantityType" maxOccurs="1"/>
+
+    <xs:element name="simulation_box" type="simulation_boxType" maxOccurs="1" />
+
     <xs:element name="interatomic_potential" type="interatomic_potentialType" minOccurs="0"/>
     <xs:element name="code" type="codeType" maxOccurs="1"/>
     <xs:element name="data" type="dataType" maxOccurs="1"/>

@@ -74,6 +74,14 @@
 
     <p>Initial temperature: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:initial_temperature" />&#160;<xsl:value-of select="/c:cdbml/c:cdbrecord/c:initial_temperature/@units" /></span></p>
 
+    <p>Box dimensions (Å): <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:simulation_box/c:box_X_length"/>, <xsl:value-of select="/c:cdbml/c:cdbrecord/c:simulation_box/c:box_Y_length"/>, <xsl:value-of select="/c:cdbml/c:cdbrecord/c:simulation_box/c:box_Z_length"/></span></p>
+
+    <xsl:if test="/c:cdbml/c:cdbrecord/c:simulation_box/c:box_orientation"><p>Box orientation:
+        <xsl:value-of select="/c:cdbml/c:cdbrecord/c:simulation_box/c:box_orientation/c:X_orientation"/>,
+        <xsl:value-of select="/c:cdbml/c:cdbrecord/c:simulation_box/c:box_orientation/c:Y_orientation"/>,
+        <xsl:value-of select="/c:cdbml/c:cdbrecord/c:simulation_box/c:box_orientation/c:Z_orientation"/>
+    </p></xsl:if>
+
     <p>Interatomic potential filename: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:filename" /></span></p>
     <p>Interatomic potential comment: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:comment" /></span></p>
 

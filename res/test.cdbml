@@ -37,6 +37,18 @@ Grants for computer time from the Centre for Scientific Computing in Espoo, Finl
   <input_filename>default-filename</input_filename>
   <simulation_time units="ps">40.000</simulation_time>
   <initial_temperature units="K">0.00</initial_temperature>
+
+  <simulation_box>
+    <box_X_length units="Å">542.507</box_X_length>
+    <box_Y_length units="Å">542.507</box_Y_length>
+    <box_Z_length units="Å">542.507</box_Z_length>
+    <box_orientation>
+        <X_orientation>100</X_orientation>
+        <Y_orientation>100</Y_orientation>
+        <Z_orientation>100</Z_orientation>
+    </box_orientation>
+  </simulation_box>
+
   <interatomic_potential>
     <filename>eam.W.W.in</filename>
   </interatomic_potential>

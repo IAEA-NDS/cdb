@@ -137,11 +137,11 @@ class CDBRecord(DataMixin):
     initial_temperature = models.FloatField('Initial temperature /K',
                                             validators=[MinValueValidator(0),])
 
-    box_X = models.FloatField('Box X-length',
+    box_X = models.FloatField('Box X-length /Å',
                               validators=[MinValueValidator(0),])
-    box_Y = models.FloatField('Box Y-length',
+    box_Y = models.FloatField('Box Y-length /Å',
                               validators=[MinValueValidator(0),])
-    box_Z = models.FloatField('Box Z-length',
+    box_Z = models.FloatField('Box Z-length /Å',
                               validators=[MinValueValidator(0),])
     box_X_orientation = models.CharField('Box X-orientation', max_length=15,
                               blank=True)
@@ -199,6 +199,26 @@ class CDBRecord(DataMixin):
                    self.total_simulation_time, '{:.3f}', attrs={'units': 'ps'})
         attach_element(cdbrecordElement, 'initial_temperature',
                    self.initial_temperature, '{:.2f}', attrs={'units': 'K'})
+
+        simulation_box_element = etree.SubElement(cdbrecordElement,
+                                                        'simulation_box')
+        attach_element(simulation_box_element, 'box_X_length', self.box_X,
+                       '{:.4f}', attrs={'units': 'Å'})
+        attach_element(simulation_box_element, 'box_Y_length', self.box_Y,
+                       '{:.4f}', attrs={'units': 'Å'})
+        attach_element(simulation_box_element, 'box_Z_length', self.box_Z,
+                       '{:.4f}', attrs={'units': 'Å'})
+        if any((self.box_X_orientation, self.box_Y_orientation,
+                                            self.box_Z_orientation)):
+            box_orientation_element = etree.SubElement(simulation_box_element,
+                                                       'box_orientation')
+            attach_element(box_orientation_element, 'X_orientation',
+                           self.box_X_orientation or 'MISSING')
+            attach_element(box_orientation_element, 'Y_orientation',
+                           self.box_Y_orientation or 'MISSING')
+            attach_element(box_orientation_element, 'Z_orientation',
+                           self.box_Z_orientation or 'MISSING')
+
         if (self.interatomic_potential_filename or
             self.interatomic_potential_comment):
             PEElement = etree.SubElement(cdbrecordElement,
