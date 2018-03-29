@@ -136,6 +136,20 @@ class CDBRecord(DataMixin):
                             validators=[MinValueValidator(0),])
     initial_temperature = models.FloatField('Initial temperature /K',
                                             validators=[MinValueValidator(0),])
+
+    box_X = models.FloatField('Box X-length',
+                              validators=[MinValueValidator(0),])
+    box_Y = models.FloatField('Box Y-length',
+                              validators=[MinValueValidator(0),])
+    box_Z = models.FloatField('Box Z-length',
+                              validators=[MinValueValidator(0),])
+    box_X_orientation = models.CharField('Box X-orientation', max_length=15,
+                              blank=True)
+    box_Y_orientation = models.CharField('Box Y-orientation', max_length=15,
+                              blank=True)
+    box_Z_orientation = models.CharField('Box Z-orientation', max_length=15,
+                              blank=True)
+
     interatomic_potential_filename = models.CharField(max_length=100,
                                                       blank=True)
     interatomic_potential_comment = models.TextField(blank=True)
