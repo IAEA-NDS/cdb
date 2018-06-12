@@ -1,0 +1,50 @@
+{% extends "cdbmeta/base.html" %}
+{% block meta_title %}Search{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Search CascadesDB</h1>
+
+<div class="container">
+
+<form method="get">
+    {{ filter.form.as_p }}
+    <button type="submit">Search</button>
+</form>
+
+<h2 class="text-center">Results</h2>
+
+<table class="table table-striped">
+<thead>
+<tr>
+    <th>Attribution</th>
+    <th>Material</th>
+    <th>PKA energy /keV</th>
+    <th>Simulation time /ps</th>
+    <th>Metadata</th>
+    <th>Data archive</th>
+</tr>
+</thead>
+<tbody>
+{% for cdbrecord in filter.qs %}
+<tr>
+    <td>{{ cdbrecord.attribution.person.name }}</td>
+    <td>{{ cdbrecord.material.chemical_formula }} ({{ cdbrecord.material.structure }})</td>
+    <td>{{ cdbrecord.energy }}</td>
+    <td>{{ cdbrecord.total_simulation_time }}</td>
+    <td><a href="{% url 'cdbmeta:cdbrecord' cdbrecord.pk %}">html</a> | <a href="{% url 'cdbmeta:cdbrecord_xml' cdbrecord.pk %}">xml</a></td>
+    <td><a href="https:www-amdis.iaea.org/CDB/challenge/data/{{ cdbrecord.archive_name }}">{{ cdbrecord.archive_name }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+<!--  <ul class="list-group">
+  {% for cdbrecord in filter.qs %}
+    <li class="list-group-item"><a href="{% url 'cdbmeta:cdbrecord' cdbrecord.pk %}">{{ cdbrecord }}</a></li>
+  {% endfor %}
+  </ul>
+-->
+
+</div>
+{% endblock %}
+

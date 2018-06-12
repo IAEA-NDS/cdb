@@ -161,7 +161,7 @@ class CDBRecord(DataMixin):
         verbose_name_plural = 'CDB records'
 
     def __str__(self):
-        return '{}: {} ({}), {} eV; {} ps: {}'.format(
+        return '{}: {} ({}), {} keV; {} ps: {}'.format(
             self.attribution.person.name,
             self.material.chemical_formula, self.material.structure,
             self.energy, self.total_simulation_time, self.archive_name)
@@ -261,7 +261,7 @@ class CDBRecord(DataMixin):
 
         return cdbrecordElement
 
-    def as_cdbml(self, standalone=True, xml2html=False):
+    def as_cdbml(self, standalone=True, xsl_name=None):
         cdbml = etree.tostring(self.cdbml(), pretty_print=True,
                                encoding='unicode')
 
@@ -270,9 +270,9 @@ class CDBRecord(DataMixin):
 
         s = ['<?xml version="1.0" encoding="utf-8" ?>']
 
-        if xml2html:
+        if xsl_name:
             s.append('<?xml-stylesheet type="text/xsl" href='
-                     '"{}/static/xsl/cdbml2html.xsl"?>'.format(SITE_ROOT_URL))
+                     '"{}/static/xsl/{}"?>'.format(SITE_ROOT_URL, xsl_name))
         s.extend([
             '<cdbml version="1.0" xmlns="https://www-amdis.iaea.org/cdbml">',
             cdbml,
