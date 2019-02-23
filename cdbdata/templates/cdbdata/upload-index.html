@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<title>CascadesDB</title>
+</head>
+<body>
+
+<h1 class="text-center">CascadesDB Upload</h1>
+<div class="container">
+<p>To upload data to CascadesDB, first ensure that you have the required metadata and that the data you intend to upload is compressed (using bzip2 or gzip) into a single archive file. Multiple simulations can be uploaded in a single archive but must differ only in the PKA recoil direction if so.</p>
+<p>The archive <strong>must</strong> contain:</p>
+<ul>
+<li>.xyz output files</li>
+<li>.xyz input file, if the initial state of the material is other than a perfect crystal</li>
+</ul>
+<p>The archive <strong>should</strong> contain:</p>
+<ul>
+<li>the MD code input files corresponding to each .xyz output</li>
+<li>A file or URL to the interatomic potential used in the simulation</li>
+</ul>
+<p>The archive <strong>may</strong> contain:</p>
+<ul>
+<li>A text readme file</li>
+<li>PDF copies of any publication(s) relating to the data</li>
+</ul>
+
+<div class="text-center">
+<a href="upload/"><button class="btn btn-primary">upload data here</button></a>
+</div>
+<hr/>
+<p>Contact: <a href="mailto:ch.hill@iaea.org">Christian Hill</a></p>
+</div>
+
+</body>
+</html>
+

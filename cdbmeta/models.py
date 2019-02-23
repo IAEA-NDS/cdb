@@ -47,7 +47,7 @@ class LatticeParameters(models.Model):
         verbose_name_plural = 'Lattice parameters'
 
     def __str__(self):
-        return 'a={:.3f} Å, b={:.3f} Å, c={:.3f} Å,'\
+        return 'a={:g} Å, b={:g} Å, c={:g} Å,'\
                ' α = {:.1f}°, β = {:.1f}°, γ = {:.1f}°'.format(
             self.a, self.b, self.c, self.alpha, self.beta, self.gamma)
 
@@ -82,7 +82,10 @@ class Material(models.Model):
                                            blank=True, null=True)
 
     def __str__(self):
-        return '{} ({})'.format(self.chemical_formula, self.structure)
+        s = '{} ({})'.format(self.chemical_formula, self.structure)
+        if self.lattice_parameters:
+            return '{}: {}'.format(s, self.lattice_parameters)
+        return s
 
     def cdbml(self):
         matElement = etree.Element('material')
@@ -106,7 +109,11 @@ class DataColumn(models.Model):
 
 class DataMixin(models.Model):
     archive_name = models.CharField(max_length=100)
-    initial_configuration_filename=models.CharField(max_length=100, blank=True)
+    archive_filesize = models.BigIntegerField(
+                validators=[MinValueValidator(0),], blank=True, null=True)
+    initial_configuration_filename=models.CharField(max_length=100, blank=True,
+        help_text='If provided, the filename of the .xyz file giving the '
+                  'initial state of the material in the simulation')
     initial_configuration_comments = models.TextField(blank=True)
     additional_columns = SortedManyToManyField(DataColumn, blank=True)
     comments = models.TextField(blank=True)
@@ -116,22 +123,32 @@ class DataMixin(models.Model):
         verbose_name_plural = 'Data'
 
 class CDBRecord(DataMixin):
-    attribution = models.ForeignKey(Attribution)
-    material = models.ForeignKey(Material)
-    has_surface = models.BooleanField(default=False)
-    initially_perfect = models.BooleanField(default=True)
+    attribution = models.ForeignKey(Attribution,
+        help_text='Person, publication DOI, comments and acknowledgements')
+    material = models.ForeignKey(Material,
+        help_text='Chemical formula, structure and lattice parameters')
+    has_surface = models.BooleanField('Does the simulation include a surface?',
+                                      default=False)
+    initially_perfect = models.BooleanField(
+                'Is the crystal initially perfect?', default=True)
 
-    atomic_number = models.PositiveSmallIntegerField('PKA atomic number',
-        validators=[MinValueValidator(1), MaxValueValidator(118)])
-    energy = models.FloatField('PKA energy /keV',
+    atomic_number = models.PositiveSmallIntegerField(
+        'Projectile / PKA atomic number',
+        validators=[MinValueValidator(1), MaxValueValidator(118)],
+        help_text='Example: 74 [for a tungsten PKA]')
+    energy = models.FloatField('Projectile / PKA energy /keV',
                                validators=[MinValueValidator(0),])
     recoil = models.BooleanField('PKA by recoil?', default=True)
 
-    electronic_stopping = models.BooleanField(default=False)
+    electronic_stopping = models.BooleanField(
+                'Is electronic stopping included?', default=False)
     electronic_stopping_comment = models.CharField(max_length=500, blank=True)
-    thermostat = models.BooleanField(default=False)
+    thermostat = models.BooleanField('Is a thermostat included?',
+                default=False)
     thermostat_comment = models.CharField(max_length=500, blank=True)
-    input_filename = models.CharField(max_length=100, blank=True)
+    input_filename = models.CharField(max_length=100, blank=True,
+        help_text='The input filename (or filename pattern) for the MD '
+                  'simulation code')
     total_simulation_time = models.FloatField('Total simulation time /ps',
                             validators=[MinValueValidator(0),])
     initial_temperature = models.FloatField('Initial temperature /K',
@@ -144,17 +161,19 @@ class CDBRecord(DataMixin):
     box_Z = models.FloatField('Box Z-length /Å',
                               validators=[MinValueValidator(0),])
     box_X_orientation = models.CharField('Box X-orientation', max_length=15,
-                              blank=True)
+            help_text='As Miller indices, e.g. (100)', blank=True)
     box_Y_orientation = models.CharField('Box Y-orientation', max_length=15,
-                              blank=True)
+            help_text='As Miller indices, e.g. (010)', blank=True)
     box_Z_orientation = models.CharField('Box Z-orientation', max_length=15,
-                              blank=True)
+            help_text='As Miller indices, e.g. (001)', blank=True)
 
     interatomic_potential_filename = models.CharField(max_length=100,
-                                                      blank=True)
+        help_text='If provided, the filename or URL to a resource providing '
+            'the interatomic potential(s) used in the simulation', blank=True)
     interatomic_potential_comment = models.TextField(blank=True)
-    code_name = models.CharField(max_length=100)
-    code_version = models.CharField(max_length=10)
+    code_name = models.CharField(max_length=100, help_text='e.g. "LAMMPS"')
+    code_version = models.CharField(max_length=20,
+        help_text='e.g. "22 Aug 2018"')
 
     class Meta:
         verbose_name = 'CDB record'

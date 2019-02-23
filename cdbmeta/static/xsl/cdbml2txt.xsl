@@ -76,6 +76,11 @@ Position | Name | Units
 <xsl:for-each select="/c:cdbml/c:cdbrecord/c:data/c:columns/c:column">
 <xsl:value-of select="position()" /> | <xsl:value-of select="c:name" /> | <xsl:value-of select="c:units" />
 </xsl:for-each>
+
+Comments
+--------
+<xsl:value-of select="/c:cdbml/c:cdbrecord/c:data/c:comments" />
+
 </xsl:template>
 
 <xsl:template match="c:lattice_parameters">

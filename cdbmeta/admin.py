@@ -12,5 +12,6 @@ admin.site.register(DataColumn)
 
 class CDBRecordAdmin(admin.ModelAdmin):
     model = CDBRecord
+    exclude = ('archive_filesize',)
 
 admin.site.register(CDBRecord, CDBRecordAdmin)
