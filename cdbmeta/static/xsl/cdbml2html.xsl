@@ -114,7 +114,7 @@
     <div class="card">
     <div class="card-header"><h2>Comments</h2></div>
     <div class="card-body">
-    <p><xsl:value-of select="/c:cdbml/c:cdbrecord/c:data/c:comments" /></p>
+    <pre><xsl:value-of select="/c:cdbml/c:cdbrecord/c:data/c:comments" /></pre>
     </div>
     </div>
 
