@@ -16,12 +16,16 @@ class CDBRecordFilter(django_filters.FilterSet):
             name='material__chemical_formula')
     material__structure = django_filters.CharFilter(
             name='material__structure')
+    initial_temperature_lte = django_filters.NumberFilter(
+                            name='initial_temperature', lookup_expr='lte')
+    initial_temperature_gte = django_filters.NumberFilter(
+                            name='initial_temperature', lookup_expr='gte')
     archive_name = django_filters.CharFilter(name='archive_name', 
             lookup_expr='icontains', label='Archive filename')
-    energy__gt = django_filters.NumberFilter(name='energy',
-                            lookup_expr='gt')
-    energy__lt = django_filters.NumberFilter(name='energy',
-                            lookup_expr='lt')
+    energy__gte = django_filters.NumberFilter(name='energy',
+                            lookup_expr='gte')
+    energy__lte = django_filters.NumberFilter(name='energy',
+                            lookup_expr='lte')
 
 
     class Meta:

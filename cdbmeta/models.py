@@ -47,7 +47,7 @@ class LatticeParameters(models.Model):
         verbose_name_plural = 'Lattice parameters'
 
     def __str__(self):
-        return 'a={:g} Å, b={:g} Å, c={:g} Å,'\
+        return 'a={:.10g} Å, b={:.10g} Å, c={:.10g} Å,'\
                ' α = {:.1f}°, β = {:.1f}°, γ = {:.1f}°'.format(
             self.a, self.b, self.c, self.alpha, self.beta, self.gamma)
 
@@ -147,8 +147,8 @@ class CDBRecord(DataMixin):
                 default=False)
     thermostat_comment = models.CharField(max_length=500, blank=True)
     input_filename = models.CharField(max_length=100, blank=True,
-        help_text='The input filename (or filename pattern) for the MD '
-                  'simulation code')
+        help_text='The input filename(s) (or filename pattern) for the MD '
+                  'simulation code; separate multiple filenames by whitespace')
     total_simulation_time = models.FloatField('Total simulation time /ps',
                             validators=[MinValueValidator(0),])
     initial_temperature = models.FloatField('Initial temperature /K',

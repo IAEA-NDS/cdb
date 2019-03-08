@@ -19,6 +19,7 @@
     <th>Attribution</th>
     <th>Material</th>
     <th>PKA energy /keV</th>
+    <th>Initial T /K</th>
     <th>Simulation time /ps</th>
     <th>Metadata</th>
     <th>Data archive</th>
@@ -30,6 +31,7 @@
     <td>{{ cdbrecord.attribution.person.name }}</td>
     <td>{{ cdbrecord.material.chemical_formula }} ({{ cdbrecord.material.structure }})</td>
     <td>{{ cdbrecord.energy }}</td>
+    <td>{{ cdbrecord.initial_temperature }}</td>
     <td>{{ cdbrecord.total_simulation_time }}</td>
     <td><a href="{% url 'cdbmeta:html' cdbrecord.pk %}">html</a> |
         <a href="{% url 'cdbmeta:xml' cdbrecord.pk %}">xml</a> |
