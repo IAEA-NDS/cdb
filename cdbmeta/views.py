@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from collections import namedtuple
+import os
 
+from cdb.settings import DATA_DIR
 from .models import CDBRecord
 from .filters import CDBRecordFilter
 
@@ -23,3 +25,10 @@ def cdb_search(request):
     cdbrecord_list = CDBRecord.objects.all()
     cdbrecord_filter = CDBRecordFilter(request.GET, queryset=cdbrecord_list)
     return render(request, 'cdbmeta/search.html', {'filter': cdbrecord_filter})
+
+def manifest(request):
+    filenames = os.listdir(DATA_DIR)
+    filesizes = [(filename, os.path.getsize(os.path.join(DATA_DIR, filename)))
+                    for filename in filenames]
+    response = '\n'.join('{} {}'.format(*e) for e in filesizes)
+    return HttpResponse(response, content_type='text/plain')

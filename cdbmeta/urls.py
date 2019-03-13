@@ -10,5 +10,6 @@ urlpatterns = [
         {'fmt': 'txt'}, name='txt'),
     url(r'cdbrecord/(?P<cdbrecord_id>\d+)/$', views.cdbrecord,
         {'fmt': 'html'}, name='html'),
+    url(r'manifest/$', views.manifest, name='manifest'),
     url(r'^$', views.cdb_search, name='cdb_search')
 ]
