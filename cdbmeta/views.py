@@ -31,4 +31,4 @@ def manifest(request):
     filesizes = [(filename, os.path.getsize(os.path.join(DATA_DIR, filename)))
                     for filename in filenames]
     response = '\n'.join('{} {}'.format(*e) for e in filesizes)
-    return HttpResponse(response, content_type='text/plain')
+    return HttpResponse(response, content_type='text/plain; charset=utf-8')
