@@ -21,7 +21,7 @@ response = urllib.request.urlopen(req)
 content = response.read()
 
 charset = response.headers.get_content_charset()
-charset = 'utf-8'
+#charset = 'utf-8'
 manifest = content.decode(charset)
 manifest = dict(line.split() for line in manifest.split('\n'))
 non_matching = set(filenames).difference(manifest.keys())

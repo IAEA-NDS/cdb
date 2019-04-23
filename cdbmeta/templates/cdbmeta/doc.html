@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<style>
+li.mandatory {
+    font-weight: bold;
+}
+li.optional {
+    font-weight: normal;
+</style>
+
+<title>CascadesDB: Documentation</title>
+</head>
+<body>
+
+<h1 class="text-center">CascadesDB: Documentation</h1>
+<div class="container">
+<p>Metadata for the CascadesDB database is provided in an XML format, which may be readily transformed into plain text or HTML by means of XSLT: links to all three formats are provided in the search results.</p>
+
+<ul>
+<li><a href="https://cascadesdb.org/static/xsd/cdbml-1.0.xsd">The CDBML XML Schema</a></li>
+<li><a href="https://cascadesdb.org/static/xsl/cdbml2html.xsl">CDBML to HTML XSL Stylesheet</a></li>
+<li><a href="https://cascadesdb.org/static/xsl/cdbml2txt.xsl">CDBML to plain text XSL Stylesheet</a></li>
+</ul>
+
+<p>A CDBML document consists of one or more <code>cdbrecord</code> elements inside a <code>cdbml</code> root element. Each <code>cdbrecord</code> represents the metadata for a set of collisional cascade simulations. Generally, a set of such simulations will differ only in the original PKA recoil direction, the other parameters (material, energy, temperature, etc.) given explicitly by the metadata.</p>
+<p>The meanings of the XML fields for a CDBML file are given below. Required fields are in <strong>bold</strong>.</p>
+
+<h5><code>cdbrecord</code></h5>
+<ul>
+
+<li class="mandatory"><code>attribution</code>: details about the author responsible for the data
+  <ul>
+  <li class="mandatory"><code>name</code>: author name.</li>
+  <li class="mandatory"><code>affiliation</code>: author affiliation (university or other research institute).</li>
+  <li class="mandatory"><code>doi</code>: DOI to the principle publication describing the research producing the data described by this CDB record.</li>
+  <li class="optional"><code>comments</code>: Optional comments concerning this CDB record.</li>
+  <li class="optional"><code>acknowledgements</code>: Optional acknowledgements (e.g. of funding bodies or other assistance) for this CDB record.</li>
+  </ul>
+</li>
+
+<li class="mandatory"><code>material</code>: details about the material (typically a crystal) within which the cascade occurs:
+  <ul>
+  <li class="mandatory"><code>formula</code>: chemical formula for the material <mark>description to follow</mark>.</li>
+  <li class="mandatory"><code>structure</code>: specficiation of the material structure: e.g. <code>bcc</code>, <code>fcc</code>.</li>
+  <li class="mandatory"><code>lattice_parameters</code>: crystal lattice parameters:
+    <ul>
+    <li class="mandatory"><code>a</code>: unit cell length, a; mandatory units (usually "<code>Å</code>") provided as an attribute.</li>
+    <li class="mandatory"><code>b</code>: unit cell length, b; mandatory units (usually "<code>Å</code>") provided as an attribute.</li>
+    <li class="mandatory"><code>c</code>: unit cell length, c; mandatory units (usually "<code>Å</code>") provided as an attribute.</li>
+    <li class="mandatory"><code>alpha</code>: unit cell angle, α; mandatory units (usually "<code>deg</code>") provided as an attribute.</li>
+    <li class="mandatory"><code>beta</code>: unit cell angle, β; mandatory units (usually "<code>deg</code>") provided as an attribute.</li>
+    <li class="mandatory"><code>gamma</code>: unit cell angle, γ; mandatory units (usually "<code>deg</code>") provided as an attribute.</li>
+    </ul>
+  </li>
+  </ul>
+</li>
+
+<li class="mandatory"><code>has_surface</code>: Does the simulation include a surface? <code>true</code> or <code>false</code>.</li>
+
+<li class="mandatory"><code>initially_perfect</code>: Is the initial state that of a perfect crystal? <code>true</code> or <code>false</code>.</li>
+
+<li class="mandatory"><code>PKA_atomic_number</code>: Atomic number of the primary knock-on atom.</li>
+
+<li class="mandatory"><code>PKA</code>: Description of the PKA conditions (e.g. energy).</li>
+
+<li class="mandatory"><code>electronic_stopping</code>: Is electronic stopping included in the simulation? <code>true</code> or <code>false</code>.</li>
+
+<li class="optional"><code>electronic_stopping_comment</code>: Optional comment concerning any electronic stopping effect included.</li>
+
+<li class="mandatory"><code>thermostat</code>: Is a thermostat included in the simulation? <code>true</code> or <code>false</code>.</li>
+
+<li class="optional"><code>thermostat_comment</code>: Optional comment concerning any thermostat included.</li>
+
+<li class="optional"><code>input_filename</code>: Whitespace-delimited list of the names of any input files supplied to re-run the simulation (the filenames themselves must not contain spaces!)</li>
+
+<li class="mandatory"><code>simulation_time</code>: The time of the final frame of the simulation provided in the archive, <mark>in picoseconds</mark>.</li>
+
+<li class="mandatory"><code>initial_temperature</code>: The initial temperature of the material <mark>in K</mark>.</li>
+
+<li class="mandatory"><code>simulation_box</code>: Description of the size and orientation of the simulation box used.
+  <ul>
+  <li class="mandatory"><code>box_X_length</code>: Length of simulation box in the x-direction mandatory units (usually "<code>Å</code>") provided as an attribute.</li>
+  <li class="mandatory"><code>box_Y_length</code>: Length of simulation box in the y-direction mandatory units (usually "<code>Å</code>") provided as an attribute.</li>
+  <li class="mandatory"><code>box_Z_length</code>: Length of simulation box in the z-direction mandatory units (usually "<code>Å</code>") provided as an attribute.</li>
+  <li class="optional"><code>box_orientation</code>: Specification of the orientation of the simulation box:
+    <ul>
+    <li class="mandatory"><code>X_orientation</code>: Orientation of the simulation box x-direction in Miller index notation (e.g. "<code>100</code>").</li>
+    <li class="mandatory"><code>Y_orientation</code>: Orientation of the simulation box y-direction in Miller index notation (e.g. "<code>010</code>").</li>
+    <li class="mandatory"><code>Z_orientation</code>: Orientation of the simulation box z-direction in Miller index notation (e.g. "<code>001</code>").</li>
+    </ul>
+  </li>
+  </ul>
+</li>
+
+<li><code>interatomic_potental</code>: Description of the interatomic potential used:
+  <ul>
+  <li class="mandatory"><code>filename</code>: Filename (local to the provided data archive) or URI to the interatomic potential used.</li>
+  <li class="optional"><code>comment</code>: Optional comment, including a reference if available, concerning the interatomic potential.</li>
+  </ul>
+</li>
+
+<li class="mandatory"><code>code</code>: Specification of the simulation code used:
+  <ul>
+  <li class="mandatory"><code>name</code>: Simulation code name.</li>
+  <li class="mandatory"><code>version</code>: Simulation code version.</li>
+  </ul>
+</li>
+
+<li class="mandatory"><code>data</code>: Description of the provided .xyz simulation file:
+  <ul>
+  <li class="mandatory"><code>archive_name</code>: Filename of the compressed data archive associated with this metadata. This will begin with a three-digit hexadecimal number which is unique to the data set.</li>
+  <li class="mandatory"><code>columns</code>: Description of the columns provided within the .xyz file. The first four columns specify an atom as "Element Symbol", "x / Å", "y / Å", "z / Å". <code>columns</code> contains an ordered sequence of <code>column</code> elements:
+    <ul>
+    <li class="mandatory"><code>name</code>: column name.</li>
+    <li class="optional"><code>units</code>: column units <mark>description to follow</mark>.</li>
+    <li class="optional"><code>description</code>: column description, if not obvious.</li>
+    </ul>
+  </li>
+  </ul>
+</li>
+
+</ul>
+
+
+</div>
+
+</body>
+</html>
+
