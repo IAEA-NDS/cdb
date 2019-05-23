@@ -1,0 +1,17 @@
+{% extends "cdbmeta/base.html" %}
+{% load static %}
+
+{% block meta_title %}Data Sources{% endblock %}
+
+{% block content %}
+<h1>Data Sources</h1>
+<div class="container content-container">
+
+<ul class="list-group">
+{% for ref in refs %}
+<li class="list-group-item">{{ ref.html|safe }} <a href="/cdbmeta/?attribution__publication_doi={{ ref.doi|urlencode:"" }}">[data sets]</a></li>
+{% endfor %}
+</ul>
+
+</div>
+{% endblock %}

@@ -1,19 +1,12 @@
+{% extends "cdbmeta/base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+{% block meta_title %}Home{% endblock %}
 
-<title>CascadesDB</title>
-</head>
-<body>
+{% block content %}
+<h1>CascadesDB</h1>
 
-<h1 class="text-center">CascadesDB</h1>
 <div class="container">
-<p>CascadesDB is a database of molecular dynamics simulations of collision cascades.</p>
-<p>A <a href="/cdbmeta/">simple search interface is provided for obtaining data from CascadesDB</a>.</p>
-<p><a href="/cdbmeta/doc">Documentation</a> for the XML format used to describe the metadata, CDBML, is also available.</p>
+<p>CascadesDB is a database of molecular dynamics simulations of collision cascades, developed by the International Atomic Energy Agency.</p>
 
 <div class="text-center">
 <figure class="figure">
@@ -23,8 +16,7 @@
 </div>
 
 <!--<p>If you have a login ID and password you can <a href="/cdbdata/">upload data here</a>.</p>-->
-<p>Contact: <a href="mailto:ch.hill@iaea.org">Christian Hill</a></p>
 </div>
 
-</body>
-</html>
+{% endblock %}
+

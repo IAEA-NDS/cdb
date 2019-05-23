@@ -2,9 +2,11 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from collections import namedtuple
 import os
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from cdb.settings import DATA_DIR
 from .models import CDBRecord
+from refs.models import Ref
 from .filters import CDBRecordFilter
 
 CDBOutputFormat = namedtuple('CDBOutputFormat', ('stylesheet', 'content_type'))
@@ -24,7 +26,23 @@ def cdbrecord(request, cdbrecord_id, fmt='html'):
 def cdb_search(request):
     cdbrecord_list = CDBRecord.objects.all()
     cdbrecord_filter = CDBRecordFilter(request.GET, queryset=cdbrecord_list)
-    return render(request, 'cdbmeta/search.html', {'filter': cdbrecord_filter})
+    filtered_qs = cdbrecord_filter.qs
+    paginator = Paginator(filtered_qs, 10)
+
+    page = request.GET.get('page')
+    try:
+        response = paginator.page(page)
+    except PageNotAnInteger:
+        response = paginator.page(1)
+    except EmptyPage:
+        response = paginator.page(paginator.num_pages)
+
+    c = {'filter': cdbrecord_filter, 'filtered_cdbrecords': response}
+    return render(request, 'cdbmeta/search.html', c)
+
+def refs(request):
+    c = {'refs': Ref.objects.all()} 
+    return render(request, 'cdbmeta/refs.html', c)
 
 def manifest(request):
     filenames = os.listdir(DATA_DIR)

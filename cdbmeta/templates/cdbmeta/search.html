@@ -2,13 +2,74 @@
 {% block meta_title %}Search{% endblock %}
 
 {% block content %}
-<h1 class="text-center">Search CascadesDB</h1>
+<h1>Search</h1>
 
 <div class="container">
 
 <form method="get">
-    {{ filter.form.as_p }}
-    <button type="submit">Search</button>
+<div class="card card-body search-card">
+<div class="container-fluid">
+
+<div class="row">
+<div class="form-group col-md-4 text-right">
+<label for="id_attribution__person__name">Author name:</label>
+</div>
+<div class="form-group col-md-8">
+{{ filter.form.attribution__person__name }}
+</div>
+</div>
+
+<div class="row">
+<div class="form-group col-md-4 text-right">
+<label for="id_attribution__publication_doi">Publication DOI:</label>
+</div>
+<div class="form-group col-md-8">
+{{ filter.form.attribution__publication_doi }}
+</div>
+</div>
+
+<div class="row">
+<div class="form-group col-md-4 text-right">
+<label for="id_material__chemical_formula">Material chemical formula:</label>
+</div>
+<div class="form-group col-md-8">
+<input type="text" name="material__chemical_formula" id="id_material__chemical_formula" /><p class="search-examples">e.g. W, Fe</p> 
+</div>
+</div>
+
+<div class="row">
+<div class="form-group col-md-12">
+<input type="number" name="initial_temperature_gte" id="id_initial_temperature_gte" placeholder="Tmin K" style="margin-right: 10px;"/>
+≤ Initial temperature /K ≤
+<input type="number" name="initial_temperature_lte" id="id_initial_temperature_lte" placeholder="Tmax K" style="margin-left: 10px;"/>
+</div>
+</div>
+
+<div class="row">
+<div class="form-group col-md-12">
+<input type="number" name="energy__gte" id="id_energy_gte" placeholder="Emin keV" style="margin-right: 10px;"/>
+≤ Projectile / PKA energy /keV ≤
+<input type="number" name="energy__lte" id="id_energy_lte" placeholder="Emax keV" style="margin-left: 10px;"/>
+</div>
+</div>
+
+<div class="row">
+<div class="form-group col-md-4 text-right">
+<label for="id_archive_name">Archive name:</label>
+</div>
+<div class="form-group col-md-8">
+{{ filter.form.archive_name }}
+</div>
+</div>
+
+<div class="row">
+<div class="form-group col-md-12 text-center">
+    <button type="submit" class="btn btn-primary">Search</button>
+</div>
+</div>
+
+</div>
+</div>
 </form>
 
 <h2 class="text-center">Results</h2>
@@ -26,7 +87,7 @@
 </tr>
 </thead>
 <tbody>
-{% for cdbrecord in filter.qs %}
+{% for cdbrecord in filtered_cdbrecords %}
 <tr>
     <td>{{ cdbrecord.attribution.person.name }}</td>
     <td>{{ cdbrecord.material.chemical_formula }} ({{ cdbrecord.material.structure }})</td>
@@ -42,6 +103,22 @@
 {% endfor %}
 </tbody>
 </table>
+
+{% if filtered_cdbrecords.has_other_pages %}
+  <ul class="pagination">
+      <li class="page-item{% if not filtered_cdbrecords.has_previous %} disabled{% endif %}"><a class="page-link" href="?page={% if filtered_cdbrecords.has_previous %}{{ filtered_cdbrecords.previous_page_number }}{% endif %}">&laquo; Previous</a></li>
+    {% for i in filtered_cdbrecords.paginator.page_range %}
+      {% if filtered_cdbrecords.number == i %}
+        <li class="page-item active"><a class="page-link" href="#"><span>{{ i }} <span class="sr-only">(current)</span></span></a></li>
+      {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    
+      <li class="page-item{% if not filtered_cdbrecords.has_next %} disabled{% endif %}"><a class="page-link" href="?page={% if filtered_cdbrecords.has_next %}{{ filtered_cdbrecords.next_page_number }}{% endif %}">Next &raquo;</a></li>
+  </ul>
+{% endif %}
+
 
 </div>
 {% endblock %}

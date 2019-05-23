@@ -23,12 +23,16 @@ from django.conf.urls.static import static
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
-    url(r'cdbmeta/', include('cdbmeta.urls')),
+    url(r'cdbmeta/', include('cdbmeta.urls'), name="search"),
 
     url(r'accounts/', include('django.contrib.auth.urls')),
 
     url(r'cdbdata/', include('cdbdata.urls')),
-    url(r'^$', TemplateView.as_view(template_name='cdbmeta/index.html')),
+    url(r'^contact/$',
+        TemplateView.as_view(template_name='cdbmeta/contact.html'),
+        name="contact"),
+    url(r'^$', TemplateView.as_view(template_name='cdbmeta/index.html'),
+        name="home"),
 ]
 
 

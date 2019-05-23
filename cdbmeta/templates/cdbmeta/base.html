@@ -4,6 +4,7 @@
 <head>
 <meta charset="utf-8">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:100,100i,400,400i,700,700i" rel="stylesheet">
 <link rel="stylesheet" href="{% static "cdbmeta/css/custom.css" %}">
 
 {% block extra_css %}{% endblock %}
@@ -16,6 +17,39 @@
 <title>CascadesDB: {% block meta_title %}{% endblock %}</title>
 </head>
 <body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">CascadesDB</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item{% if request.resolver_match.url_name == 'home' %} active{% endif %}">
+        <a class="nav-link" href="{% url "home" %}">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link{% if request.resolver_match.url_name == 'cdb_search' %} active{% endif %}" href="{% url "cdbmeta:cdb_search" %}">Search</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle{% if request.resolver_match.url_name in "cdbmeta:contact,cdbmeta:documentation,cdbmeta:refs" %} active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          About
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/cdbmeta/doc">Documentation</a>
+          <a class="dropdown-item" href="/cdbmeta/refs">Data Sources</a>
+          <a class="dropdown-item disabled" href="#">API</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/contact/">Contact</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Upload</a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
 {% block content %}
 {% endblock %}

@@ -1,5 +1,13 @@
+body {
+  font-family: 'IBM Plex Sans', sans-serif; }
+
 .content-container {
     max-width: 800px;
+}
+
+h1 {
+    padding-left: 20px;
+    background-color: #eee;
 }
 
 .card {
@@ -10,6 +18,23 @@
     background-color: #a0d0a0;
 }
 
+.search-card {
+    max-width: 800px;
+    background-color: #eee;
+    margin: 10px auto 40px auto;
+}
+
 .value {
     font-weight: bold;
+}
+
+.search-examples {
+    color: #888;
+}
+
+li.mandatory {
+    font-weight: bold;
+}
+li.optional {
+    font-weight: normal;
 }

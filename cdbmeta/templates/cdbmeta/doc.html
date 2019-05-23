@@ -1,23 +1,10 @@
+{% extends "cdbmeta/base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-<style>
-li.mandatory {
-    font-weight: bold;
-}
-li.optional {
-    font-weight: normal;
-</style>
+{% block meta_title %}Documentation{% endblock %}
 
-<title>CascadesDB: Documentation</title>
-</head>
-<body>
-
-<h1 class="text-center">CascadesDB: Documentation</h1>
+{% block content %}
+<h1>Documentation</h1>
 <div class="container">
 <p>Metadata for the CascadesDB database is provided in an XML format, which may be readily transformed into plain text or HTML by means of XSLT: links to all three formats are provided in the search results.</p>
 
@@ -129,6 +116,4 @@ li.optional {
 
 </div>
 
-</body>
-</html>
-
+{% endblock %}

@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'chunked_upload',
 
     'miniclerval',
+    'refs',
     'cdbmeta',
     'cdbdata',
 ]
