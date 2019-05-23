@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from sortedm2m.fields import SortedManyToManyField
 from miniclerval.models import Person
+from refs.models import Ref
 from lxml import etree
 from utils.xml import attach_element, attach_optional_element, true_false
 from cdb.settings import SITE_ROOT_URL
@@ -9,6 +10,7 @@ from cdb.settings import SITE_ROOT_URL
 class Attribution(models.Model):
     person = models.ForeignKey(Person)
     publication_doi = models.CharField(max_length=50)
+    source = models.ForeignKey(Ref, blank=True, null=True)
     general_comments = models.TextField(blank=True)
     acknowledgements = models.TextField(blank=True)
 
@@ -187,7 +189,7 @@ class CDBRecord(DataMixin):
 
     @property
     def qualified_id(self):
-        return 'R{:d}'.format(self.pk)
+        return 'R{:03x}'.format(self.pk)
 
     def cdbml(self):
         cdbrecordElement = etree.Element('cdbrecord', id=self.qualified_id)

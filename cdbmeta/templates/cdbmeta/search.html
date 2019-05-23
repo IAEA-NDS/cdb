@@ -33,23 +33,23 @@
 <label for="id_material__chemical_formula">Material chemical formula:</label>
 </div>
 <div class="form-group col-md-8">
-<input type="text" name="material__chemical_formula" id="id_material__chemical_formula" /><p class="search-examples">e.g. W, Fe</p> 
+<input type="text" name="material__chemical_formula" id="id_material__chemical_formula" value="{{ filter.form.material__chemical_formula.value }}"/><p class="search-examples">e.g. W, Fe</p> 
 </div>
 </div>
 
 <div class="row">
 <div class="form-group col-md-12">
-<input type="number" name="initial_temperature_gte" id="id_initial_temperature_gte" placeholder="Tmin K" style="margin-right: 10px;"/>
+<input type="number" name="initial_temperature_gte" id="id_initial_temperature_gte" placeholder="Tmin K" value="{{ filter.form.initial_temperature_gte.value }}" style="margin-right: 10px;"/>
 ≤ Initial temperature /K ≤
-<input type="number" name="initial_temperature_lte" id="id_initial_temperature_lte" placeholder="Tmax K" style="margin-left: 10px;"/>
+<input type="number" name="initial_temperature_lte" id="id_initial_temperature_lte" placeholder="Tmax K" value="{{ filter.form.initial_temperature_lte.value }}" style="margin-left: 10px;"/>
 </div>
 </div>
 
 <div class="row">
 <div class="form-group col-md-12">
-<input type="number" name="energy__gte" id="id_energy_gte" placeholder="Emin keV" style="margin-right: 10px;"/>
+<input type="number" name="energy__gte" id="id_energy_gte" placeholder="Emin keV" value="{{ filter.form.energy__gte.value }}" style="margin-right: 10px;"/>
 ≤ Projectile / PKA energy /keV ≤
-<input type="number" name="energy__lte" id="id_energy_lte" placeholder="Emax keV" style="margin-left: 10px;"/>
+<input type="number" name="energy__lte" id="id_energy_lte" placeholder="Emax keV" value="{{ filter.form.energy__lte.value }}" style="margin-left: 10px;"/>
 </div>
 </div>
 
@@ -83,7 +83,8 @@
     <th>Initial T /K</th>
     <th>Simulation time /ps</th>
     <th>Metadata</th>
-    <th>Data archive</th>
+    <th>Data</th>
+    <th>Source</th>
 </tr>
 </thead>
 <tbody>
@@ -98,7 +99,8 @@
         <a href="{% url 'cdbmeta:xml' cdbrecord.pk %}">xml</a> |
         <a href="{% url 'cdbmeta:txt' cdbrecord.pk %}">txt</a>
     </td>
-    <td><a href="https://cascadesdb.org/data/cdb/{{ cdbrecord.archive_name }}">{{ cdbrecord.archive_name }}</a>{% if cdbrecord.archive_filesize %} ({{ cdbrecord.archive_filesize|filesizeformat }}){% endif %}</td>
+    <td><a href="https://cascadesdb.org/data/cdb/{{ cdbrecord.archive_name }}">{{ cdbrecord.qualified_id }}</a>{% if cdbrecord.archive_filesize %} ({{ cdbrecord.archive_filesize|filesizeformat }}){% endif %}</td>
+<td><a href="https://doi.org/{{ cdbrecord.attribution.publication_doi }}">link</a>{% if cdbrecord.attribution.source.bibtex %} | <a href="{% url 'refs:bibtex' cdbrecord.attribution.source.pk %}">bibtex</a>{% endif %}</td>
 </tr>
 {% endfor %}
 </tbody>

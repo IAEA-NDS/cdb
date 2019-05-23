@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'accounts/', include('django.contrib.auth.urls')),
 
     url(r'cdbdata/', include('cdbdata.urls')),
+    url(r'refs/', include('refs.urls')),
     url(r'^contact/$',
         TemplateView.as_view(template_name='cdbmeta/contact.html'),
         name="contact"),
