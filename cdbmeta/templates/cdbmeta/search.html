@@ -33,7 +33,7 @@
 <label for="id_material__chemical_formula">Material chemical formula:</label>
 </div>
 <div class="form-group col-md-8">
-<input type="text" name="material__chemical_formula" id="id_material__chemical_formula" value="{{ filter.form.material__chemical_formula.value }}"/><p class="search-examples">e.g. W, Fe</p> 
+<input type="text" name="material__chemical_formula" id="id_material__chemical_formula" value="{% if filter.form.material__chemical_formula.value %}{{ filter.form.material__chemical_formula.value }}{% endif %}"/><p class="search-examples">e.g. W, Fe</p> 
 </div>
 </div>
 
