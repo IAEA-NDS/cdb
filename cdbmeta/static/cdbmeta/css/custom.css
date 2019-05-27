@@ -5,6 +5,19 @@ body {
     max-width: 800px;
 }
 
+footer .container {
+  font-size: 80%;
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 3px black solid;
+}
+
+pre#licence {
+    max-width: 680px;
+    margin: 0 auto 0 auto;
+    border: 1px black solid;
+}
+
 h1 {
     padding-left: 20px;
     background-color: #eee;

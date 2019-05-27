@@ -32,6 +32,9 @@ urlpatterns = [
     url(r'^contact/$',
         TemplateView.as_view(template_name='cdbmeta/contact.html'),
         name="contact"),
+    url(r'^licence/$',
+        TemplateView.as_view(template_name='cdbmeta/licence.html'),
+        name="licence"),
     url(r'^$', TemplateView.as_view(template_name='cdbmeta/index.html'),
         name="home"),
 ]

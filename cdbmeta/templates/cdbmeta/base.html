@@ -33,7 +33,7 @@
         <a class="nav-link{% if request.resolver_match.url_name == 'cdb_search' %} active{% endif %}" href="{% url "cdbmeta:cdb_search" %}">Search</a>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle{% if request.resolver_match.url_name in "cdbmeta:contact,cdbmeta:documentation,cdbmeta:refs" %} active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle{% if request.resolver_match.url_name in "cdbmeta:contact,cdbmeta:documentation,cdbmeta:refs,cdbmeta:licence" %} active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           About
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -41,6 +41,7 @@
           <a class="dropdown-item" href="/cdbmeta/refs">Data Sources</a>
           <a class="dropdown-item disabled" href="#">API</a>
           <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/licence/">Licence</a>
           <a class="dropdown-item" href="/contact/">Contact</a>
         </div>
       </li>
@@ -53,6 +54,13 @@
 
 {% block content %}
 {% endblock %}
+
+<footer class="footer">
+  <div class="container">
+    <span class="text-muted">© 1998–{% now "Y" %} IAEA, All rights reserved. <a href="https://www.iaea.org/about/terms-of-use">Terms of Use</a>.</span>
+  </div>
+</footer>
+
 
 </body>
 </html>
