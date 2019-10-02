@@ -1,9 +1,9 @@
 appnope==0.1.0
 backcall==0.1.0
-certifi==2017.11.5
+certifi==2019.9.11
 chardet==3.0.4
 decorator==4.1.2
-Django==1.11.3
+Django==1.11.25
 django-chunked-upload==1.1.2
 django-countries==5.3.4.dev0
 django-debug-toolbar==1.9.1
@@ -27,5 +27,5 @@ simplegeneric==0.8.1
 six==1.11.0
 sqlparse==0.2.4
 traitlets==4.3.2
-urllib3==1.22
+urllib3==1.24.2
 wcwidth==0.1.7
