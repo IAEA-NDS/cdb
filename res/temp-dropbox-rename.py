@@ -1,5 +1,5 @@
 
-API_key = '9U1wxIXa0DAAAAAAAAAAPNDpjxf4SAqRI9W2n4S1Vi880A2mKiATYxdnv0HUX5vE'
+API_key = API_key = open('DROPBOX_ACCESS_TOKEN').read()
 dbx = dropbox.Dropbox(API_key)
 files = dbx.files_list_folder('').entries
 

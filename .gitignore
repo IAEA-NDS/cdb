@@ -12,3 +12,4 @@ local_settings.py
 res/sandpit
 res/conf.py
 res/notes.txt
+DROPBOX_ACCESS_TOKEN
