@@ -72,6 +72,7 @@
 </div>
 </form>
 
+{% if filtered_cdbrecords %}
 <h2 class="text-center">Results</h2>
 
 <table class="table table-striped">
@@ -108,17 +109,19 @@
 
 {% if filtered_cdbrecords.has_other_pages %}
   <ul class="pagination">
-      <li class="page-item{% if not filtered_cdbrecords.has_previous %} disabled{% endif %}"><a class="page-link" href="?page={% if filtered_cdbrecords.has_previous %}{{ filtered_cdbrecords.previous_page_number }}{% endif %}">&laquo; Previous</a></li>
+      <li class="page-item{% if not filtered_cdbrecords.has_previous %} disabled{% endif %}"><a class="page-link" href="?page={% if filtered_cdbrecords.has_previous %}{{ filtered_cdbrecords.previous_page_number }}{% endif %}{{ querystring }}">&laquo; Previous</a></li>
     {% for i in filtered_cdbrecords.paginator.page_range %}
       {% if filtered_cdbrecords.number == i %}
         <li class="page-item active"><a class="page-link" href="#"><span>{{ i }} <span class="sr-only">(current)</span></span></a></li>
       {% else %}
-        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ i }}{{ querystring }}">{{ i }}</a></li>
       {% endif %}
     {% endfor %}
     
-      <li class="page-item{% if not filtered_cdbrecords.has_next %} disabled{% endif %}"><a class="page-link" href="?page={% if filtered_cdbrecords.has_next %}{{ filtered_cdbrecords.next_page_number }}{% endif %}">Next &raquo;</a></li>
+      <li class="page-item{% if not filtered_cdbrecords.has_next %} disabled{% endif %}"><a class="page-link" href="?page={% if filtered_cdbrecords.has_next %}{{ filtered_cdbrecords.next_page_number }}{% endif %}{{ querystring }}">Next &raquo;</a></li>
   </ul>
+{% endif %}
+
 {% endif %}
 
 

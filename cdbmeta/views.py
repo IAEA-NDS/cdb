@@ -27,7 +27,35 @@ def cdb_search(request):
     cdbrecord_list = CDBRecord.objects.all()
     cdbrecord_filter = CDBRecordFilter(request.GET, queryset=cdbrecord_list)
     filtered_qs = cdbrecord_filter.qs
+
     paginator = Paginator(filtered_qs, 10)
+
+    c = {}
+    if request.GET:
+        page = request.GET.get('page')
+        try:
+            response = paginator.page(page)
+        except PageNotAnInteger:
+            response = paginator.page(1)
+        except EmptyPage:
+            response = paginator.page(paginator.num_pages)
+
+        print('*'*20, type(request.GET))
+        querydict = request.GET.copy()
+        try:
+            del querydict['page']
+        except KeyError:
+            pass
+        c['querystring'] = '&' + querydict.urlencode()
+    else:
+        response = None
+
+    c.update({'filter': cdbrecord_filter, 'filtered_cdbrecords': response})
+    return render(request, 'cdbmeta/search.html', c)
+
+def cdb_browse(request):
+    cdbrecord_list = CDBRecord.objects.all()
+    paginator = Paginator(cdbrecord_list, 10)
 
     page = request.GET.get('page')
     try:
@@ -37,8 +65,9 @@ def cdb_search(request):
     except EmptyPage:
         response = paginator.page(paginator.num_pages)
 
-    c = {'filter': cdbrecord_filter, 'filtered_cdbrecords': response}
-    return render(request, 'cdbmeta/search.html', c)
+    c = {'paginated_cdbrecords': response}
+    return render(request, 'cdbmeta/browse.html', c)
+
 
 def refs(request):
     c = {'refs': Ref.objects.all()} 

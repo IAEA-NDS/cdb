@@ -15,5 +15,6 @@ urlpatterns = [
     url(r'^doc$', TemplateView.as_view(template_name='cdbmeta/doc.html'),
         name='documentation'),
     url(r'^refs$', views.refs, name='refs'),
-    url(r'^$', views.cdb_search, name='cdb_search')
+    url(r'^$', views.cdb_search, name='cdb_search'),
+    url(r'^browse$', views.cdb_browse, name='cdb_browse'),
 ]
