@@ -5,7 +5,7 @@ import os
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from cdb.settings import DATA_DIR
-from .models import CDBRecord
+from .models import CDBRecord, Material
 from refs.models import Ref
 from .filters import CDBRecordFilter
 
@@ -40,7 +40,6 @@ def cdb_search(request):
         except EmptyPage:
             response = paginator.page(paginator.num_pages)
 
-        print('*'*20, type(request.GET))
         querydict = request.GET.copy()
         try:
             del querydict['page']
@@ -54,18 +53,9 @@ def cdb_search(request):
     return render(request, 'cdbmeta/search.html', c)
 
 def cdb_browse(request):
-    cdbrecord_list = CDBRecord.objects.all()
-    paginator = Paginator(cdbrecord_list, 10)
-
-    page = request.GET.get('page')
-    try:
-        response = paginator.page(page)
-    except PageNotAnInteger:
-        response = paginator.page(1)
-    except EmptyPage:
-        response = paginator.page(paginator.num_pages)
-
-    c = {'paginated_cdbrecords': response}
+    c = {}
+    c['refs'] = Ref.objects.all()
+    c['materials'] = Material.objects.values('chemical_formula').distinct()
     return render(request, 'cdbmeta/browse.html', c)
 
 

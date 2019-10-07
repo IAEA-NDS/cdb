@@ -6,53 +6,26 @@
 
 <div class="container">
 
-<table class="table table-striped">
-<thead>
-<tr>
-    <th>Attribution</th>
-    <th>Material</th>
-    <th>PKA energy /keV</th>
-    <th>Initial T /K</th>
-    <th>Simulation time /ps</th>
-    <th>Metadata</th>
-    <th>Data</th>
-    <th>Source</th>
-</tr>
-</thead>
-<tbody>
-{% for cdbrecord in paginated_cdbrecords %}
-<tr>
-    <td>{{ cdbrecord.attribution.person.name }}</td>
-    <td>{{ cdbrecord.material.chemical_formula }} ({{ cdbrecord.material.structure }})</td>
-    <td>{{ cdbrecord.energy }}</td>
-    <td>{{ cdbrecord.initial_temperature }}</td>
-    <td>{{ cdbrecord.total_simulation_time }}</td>
-    <td><a href="{% url 'cdbmeta:html' cdbrecord.pk %}">html</a> |
-        <a href="{% url 'cdbmeta:xml' cdbrecord.pk %}">xml</a> |
-        <a href="{% url 'cdbmeta:txt' cdbrecord.pk %}">txt</a>
-    </td>
-    <td><a href="https://cascadesdb.org/data/cdb/{{ cdbrecord.archive_name }}">{{ cdbrecord.qualified_id }}</a>{% if cdbrecord.archive_filesize %} ({{ cdbrecord.archive_filesize|filesizeformat }}){% endif %}</td>
-<td><a href="https://doi.org/{{ cdbrecord.attribution.publication_doi }}">link</a>{% if cdbrecord.attribution.source.bibtex %} | <a href="{% url 'refs:bibtex' cdbrecord.attribution.source.pk %}">bibtex</a>{% endif %}</td>
-</tr>
+<div class="row">
+
+<div class="col-sm-2">
+<h4>Material</h4>
+<ul class="list-group">
+{% for material in materials %}
+<li class="list-group-item"><a href="/cdbmeta/?material__chemical_formula={{ material.chemical_formula }}">{{ material.chemical_formula }}</a></li>
 {% endfor %}
-</tbody>
-</table>
+</ul>
+</div>
 
-{% if paginated_cdbrecords.has_other_pages %}
-  <ul class="pagination">
-      <li class="page-item{% if not paginated_cdbrecords.has_previous %} disabled{% endif %}"><a class="page-link" href="?page={% if paginated_cdbrecords.has_previous %}{{ paginated_cdbrecords.previous_page_number }}{% endif %}">&laquo; Previous</a></li>
-    {% for i in paginated_cdbrecords.paginator.page_range %}
-      {% if paginated_cdbrecords.number == i %}
-        <li class="page-item active"><a class="page-link" href="#"><span>{{ i }} <span class="sr-only">(current)</span></span></a></li>
-      {% else %}
-        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-      {% endif %}
-    {% endfor %}
-    
-      <li class="page-item{% if not paginated_cdbrecords.has_next %} disabled{% endif %}"><a class="page-link" href="?page={% if paginated_cdbrecords.has_next %}{{ paginated_cdbrecords.next_page_number }}{% endif %}">Next &raquo;</a></li>
-  </ul>
-{% endif %}
+<div class="col-sm-10">
+<h4>Publication</h4>
+<ul class="list-group">
+{% for ref in refs %}
+<li class="list-group-item">{{ ref.html|safe }} <a href="/cdbmeta/?attribution__publication_doi={{ ref.doi|urlencode:"" }}">[data sets]</a></li>
+{% endfor %}
+</ul>
+</div>
 
-
+</div>
 </div>
 {% endblock %}
