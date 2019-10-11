@@ -26,7 +26,7 @@ def cdbrecord(request, cdbrecord_id, fmt='html'):
 def cdb_search(request):
     cdbrecord_list = CDBRecord.objects.all()
     cdbrecord_filter = CDBRecordFilter(request.GET, queryset=cdbrecord_list)
-    filtered_qs = cdbrecord_filter.qs
+    filtered_qs = sorted(cdbrecord_filter.qs, key=lambda objects: objects.attribution.person.name)
 
     paginator = Paginator(filtered_qs, 10)
 
