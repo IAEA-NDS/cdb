@@ -26,9 +26,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     url(r'cdbmeta/', include('cdbmeta.urls'), name="search"),
-
     url(r'accounts/', include('django.contrib.auth.urls')),
-
     url(r'cdbdata/', include('cdbdata.urls')),
     url(r'refs/', include('refs.urls')),
     url(r'^contact/$',
@@ -38,14 +36,20 @@ urlpatterns = [
         TemplateView.as_view(template_name='cdbmeta/licence.html'),
         name="licence"),
     url(r'^$', cdbmeta.views.home, name="home"),
-]
+    url(r'^$', 
+        TemplateView.as_view(template_name='cdbmeta/index.html'),
+        name="home"),
+    ]
 
-
-from django.conf import settings
-from django.conf.urls import include
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns = [
         url(r'^__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
 
+# add admin urls if this functionality is enabled
+if settings.ADMIN_PAGES:
+	urlpatterns.extend([url(r'^admin/', admin.site.urls)])
+
+if settings.UPLOAD_PAGES:
+	urlpatterns.append(url(r'cdbdata/', include('cdbdata.urls')))

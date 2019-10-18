@@ -26,8 +26,9 @@ def home(request):
                         )['archive_filesize__sum'] * APPROX_COMPRESSION_RATIO
     total_size = int(round(total_size / 1024 / 1024 / 1024))
     narchives = CDBRecord.objects.all().count()
+    nsims = CDBRecord.objects.aggregate(Sum('nsim'))['nsim__sum']
     c = {'total_size': '{} GB'.format(total_size),
-         'narchives': narchives}
+         'narchives': narchives, 'total_sims': nsims}
     return render(request, 'cdbmeta/index.html', c)
 
 def cdbrecord(request, cdbrecord_id, fmt='html'):
@@ -40,7 +41,7 @@ def cdbrecord(request, cdbrecord_id, fmt='html'):
 def cdb_search(request):
     cdbrecord_list = CDBRecord.objects.all()
     cdbrecord_filter = CDBRecordFilter(request.GET, queryset=cdbrecord_list)
-    filtered_qs = cdbrecord_filter.qs
+    filtered_qs = sorted(cdbrecord_filter.qs, key=lambda objects: objects.attribution.person.name)
 
     paginator = Paginator(filtered_qs, 10)
 
