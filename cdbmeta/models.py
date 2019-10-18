@@ -113,6 +113,8 @@ class DataMixin(models.Model):
     archive_name = models.CharField(max_length=100)
     archive_filesize = models.BigIntegerField(
                 validators=[MinValueValidator(0),], blank=True, null=True)
+    nsim = models.PositiveSmallIntegerField(null=True, blank=True,
+                verbose_name='Number of simulations')
     initial_configuration_filename=models.CharField(max_length=100, blank=True,
         help_text='If provided, the filename of the .xyz file giving the '
                   'initial state of the material in the simulation')

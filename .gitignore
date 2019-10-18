@@ -8,6 +8,7 @@
 *.swl
 .DS_Store
 .coverage
+.sass-cache
 local_settings.py
 res/sandpit
 res/conf.py

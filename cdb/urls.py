@@ -20,6 +20,8 @@ from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
 
+import cdbmeta.views
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
@@ -35,8 +37,7 @@ urlpatterns = [
     url(r'^licence/$',
         TemplateView.as_view(template_name='cdbmeta/licence.html'),
         name="licence"),
-    url(r'^$', TemplateView.as_view(template_name='cdbmeta/index.html'),
-        name="home"),
+    url(r'^$', cdbmeta.views.home, name="home"),
 ]
 
 

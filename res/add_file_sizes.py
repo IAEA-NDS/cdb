@@ -10,7 +10,7 @@ django.setup()
 
 from cdbmeta.models import CDBRecord
 
-dry_run = True
+dry_run = False
 
 cdbrecords = CDBRecord.objects.all()
 filenames = cdbrecords.values_list('archive_name', flat=True)

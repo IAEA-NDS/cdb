@@ -83,6 +83,7 @@
     <th>PKA energy /keV</th>
     <th>Initial T /K</th>
     <th>Simulation time /ps</th>
+    <th>Number of simulations</th>
     <th>Metadata</th>
     <th>Data</th>
     <th>Source</th>
@@ -96,6 +97,7 @@
     <td>{{ cdbrecord.energy }}</td>
     <td>{{ cdbrecord.initial_temperature }}</td>
     <td>{{ cdbrecord.total_simulation_time }}</td>
+    <td>{{ cdbrecord.nsim }}</td>
     <td><a href="{% url 'cdbmeta:html' cdbrecord.pk %}">html</a> |
         <a href="{% url 'cdbmeta:xml' cdbrecord.pk %}">xml</a> |
         <a href="{% url 'cdbmeta:txt' cdbrecord.pk %}">txt</a>

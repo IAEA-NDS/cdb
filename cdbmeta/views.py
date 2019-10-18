@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
+from django.db.models import Sum
+
 from collections import namedtuple
 import os
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -9,12 +11,24 @@ from .models import CDBRecord, Material
 from refs.models import Ref
 from .filters import CDBRecordFilter
 
+# Rough compression factor for data archives
+APPROX_COMPRESSION_RATIO = 5
+
 CDBOutputFormat = namedtuple('CDBOutputFormat', ('stylesheet', 'content_type'))
 _output_formats = {
     'xml': CDBOutputFormat(None, 'text/xml'),
     'html': CDBOutputFormat('cdbml2html.xsl', 'text/xml'),
     'txt': CDBOutputFormat('cdbml2txt.xsl', 'text/xml'),
 }
+
+def home(request):
+    total_size = CDBRecord.objects.aggregate(Sum('archive_filesize')
+                        )['archive_filesize__sum'] * APPROX_COMPRESSION_RATIO
+    total_size = int(round(total_size / 1024 / 1024 / 1024))
+    narchives = CDBRecord.objects.all().count()
+    c = {'total_size': '{} GB'.format(total_size),
+         'narchives': narchives}
+    return render(request, 'cdbmeta/index.html', c)
 
 def cdbrecord(request, cdbrecord_id, fmt='html'):
     cdb_record = get_object_or_404(CDBRecord, pk=cdbrecord_id)
