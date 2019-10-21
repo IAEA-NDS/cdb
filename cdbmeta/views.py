@@ -7,7 +7,8 @@ import os
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from cdb.settings import DATA_DIR
-from .models import CDBRecord, Material
+from .models import CDBRecord, Material, Attribution, Potential
+from miniclerval.models import Person
 from refs.models import Ref
 from .filters import CDBRecordFilter
 
@@ -41,7 +42,8 @@ def cdbrecord(request, cdbrecord_id, fmt='html'):
 def cdb_search(request):
     cdbrecord_list = CDBRecord.objects.all()
     cdbrecord_filter = CDBRecordFilter(request.GET, queryset=cdbrecord_list)
-    filtered_qs = sorted(cdbrecord_filter.qs, key=lambda objects: objects.attribution.person.name)
+    filtered_qs = sorted(cdbrecord_filter.qs,
+                         key=lambda objects: objects.attribution.person.name)
 
     paginator = Paginator(filtered_qs, 10)
 
@@ -69,8 +71,18 @@ def cdb_search(request):
 
 def cdb_browse(request):
     c = {}
-    c['refs'] = Ref.objects.all()
+    c['refs'] = Ref.objects.filter(pk__in=Attribution.objects.all()
+                                   .values('source').distinct())
     c['materials'] = Material.objects.values('chemical_formula').distinct()
+
+    people = Person.objects.filter(pk__in=Attribution.objects.all()
+                                   .values('person').distinct())
+    people = list(people)
+    people.sort(key=lambda e: e.surname)
+    c['people'] = people
+
+    c['potentials'] = Potential.objects.all()
+
     return render(request, 'cdbmeta/browse.html', c)
 
 

@@ -5,6 +5,14 @@ body {
     max-width: 800px;
 }
 
+p#data-amount-banner {
+    padding: 10px 0 10px 0;
+}
+
+div.xn-tab-content {
+    padding-top: 20px;
+}
+
 footer .container {
   font-size: 80%;
   margin-top: 20px;

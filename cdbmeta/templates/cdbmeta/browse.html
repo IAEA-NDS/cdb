@@ -3,12 +3,29 @@
 
 {% block content %}
 <h1>Browse</h1>
-
 <div class="container">
 
-<div class="row">
+<!-- Tabbed navigation for Browse categories -->
+<ul class="nav nav-tabs xn-tab-nav" id="browse-tab-nav">
+  <li class="nav-item">
+    <a class="nav-link active" data-toggle="tab" href="#browse-material">Material</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#browse-publications">Publications</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#browse-potentials">Potentials</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#browse-people">People</a>
+  </li>
+</ul>
 
-<div class="col-sm-2">
+<!-- Tab panes -->
+<div class="tab-content xn-tab-content">
+
+<!-- Materials pane -->
+<div class="tab-pane container active" id="browse-material">
 <h4>Material</h4>
 <ul class="list-group">
 {% for material in materials %}
@@ -17,8 +34,9 @@
 </ul>
 </div>
 
-<div class="col-sm-10">
-<h4>Publication</h4>
+
+<div class="tab-pane container" id="browse-publications">
+<h4>Publications</h4>
 <ul class="list-group">
 {% for ref in refs %}
 <li class="list-group-item">{{ ref.html|safe }} <a href="/cdbmeta/?attribution__publication_doi={{ ref.doi|urlencode:"" }}">[data sets]</a></li>
@@ -26,6 +44,44 @@
 </ul>
 </div>
 
+
+<div class="tab-pane container" id="browse-potentials">
+<h4>Potentials</h4>
+
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Data Link</th>
+<th>Filename</th>
+<th>Reference</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+{% for potential in potentials %}
+<tr>
+<td class="align-middle"><a href="/cdbmeta/?potential__pk={{ potential.pk }}">data</a></td>
+<td class="align-middle">{{ potential.link|safe }}</td>
+<td class="small">{{ potential.source.html|safe }}</td>
+<td class="small">{{ potential.comment }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
 </div>
+
+
+<div class="tab-pane container" id="browse-people">
+<h4>People</h4>
+<ul class="list-group">
+{% for person in people %}
+<li class="list-group-item"><a href="/cdbmeta/?attribution__person__name={{ person|urlencode:"" }}">{{ person }}</a>, {{ person.institution }}, {{ person.institution.country.name }}</li>
+{% endfor %}
+</ul>
+</div>
+
+</div><!-- Tab panes -->
+
 </div>
 {% endblock %}

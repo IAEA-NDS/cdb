@@ -99,6 +99,35 @@ class Material(models.Model):
         return matElement
 
 
+class Potential(models.Model):
+    filename = models.CharField(max_length=100,
+        help_text='If provided, the filename or URL to a resource providing '
+            'the interatomic potential(s) used in the simulation', blank=True)
+    comment = models.TextField(blank=True)
+    source = models.ForeignKey(Ref, blank=True, null=True)
+
+    @property
+    def qualified_id(self):
+        return 'P{}'.format(self.id)
+
+    @property
+    def basename(self):
+        return self.filename.split('/')[-1]
+
+    def link(self):
+        if not self.filename:
+            return ''
+        return '<a href="{}">{}</a>'.format(self.filename, self.basename)
+
+    def __str__(self):
+        s = '{}:'.format(self.qualified_id)
+        if self.filename:
+            s = s + ' ' + str(self.basename) 
+        if self.source:
+            return s + ' ({})'.format(self.source)
+        return s + ' [missing ref]'
+
+
 class DataColumn(models.Model):
     name = models.CharField(max_length=100)
     units = models.CharField(max_length=20, blank=True)
@@ -108,6 +137,7 @@ class DataColumn(models.Model):
         if self.units:
             return '{} /{}'.format(self.name, self.units)
         return self.name
+
 
 class DataMixin(models.Model):
     archive_name = models.CharField(max_length=100)
@@ -171,6 +201,7 @@ class CDBRecord(DataMixin):
     box_Z_orientation = models.CharField('Box Z-orientation', max_length=15,
             help_text='As Miller indices, e.g. (001)', blank=True)
 
+    potential = models.ForeignKey(Potential, blank=True, null=True)
     interatomic_potential_filename = models.CharField(max_length=100,
         help_text='If provided, the filename or URL to a resource providing '
             'the interatomic potential(s) used in the simulation', blank=True)

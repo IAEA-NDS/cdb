@@ -26,6 +26,8 @@ class CDBRecordFilter(django_filters.FilterSet):
                             lookup_expr='gte')
     energy__lte = django_filters.NumberFilter(name='energy',
                             lookup_expr='lte')
+    potential__pk = django_filters.NumberFilter(
+            name='potential__pk', lookup_expr='exact')
 
 
     class Meta:
