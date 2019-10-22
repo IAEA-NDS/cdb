@@ -20,9 +20,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Application definition
 
-# XXX fix this for the IAEA deployment
-ADMIN_PAGES = True
-UPLOAD_PAGES = True
+ADMIN_PAGES = False
+UPLOAD_PAGES = False
 
 INSTALLED_APPS = [
     "django.contrib.contenttypes",
