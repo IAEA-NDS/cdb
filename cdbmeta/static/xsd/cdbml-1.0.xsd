@@ -83,8 +83,9 @@
 
 <xs:complexType name="interatomic_potentialType">
     <xs:sequence>
-        <xs:element name="filename" type="xs:string" maxOccurs="1" />
+        <xs:element name="filename" type="xs:string" minOccurs="0" maxOccurs="1" />
         <xs:element name="comment" type="xs:string" minOccurs="0" />
+        <xs:element name="doi" type="xs:string" minOccurs="0" />
     </xs:sequence>
 </xs:complexType>
 

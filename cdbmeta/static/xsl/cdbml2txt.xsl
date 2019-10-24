@@ -53,6 +53,7 @@ Electronic stopping included? </xsl:text><xsl:value-of select="/c:cdbml/c:cdbrec
 </xsl:if>
 <xsl:text>Interatomic potential filename: </xsl:text><xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:filename" /><xsl:value-of select="$newline"/>
 <xsl:text>Interatomic potential comment: </xsl:text><xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:comment" /><xsl:value-of select="$newline"/>
+<xsl:text>Interatomic potential doi: </xsl:text><xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:doi" /><xsl:value-of select="$newline"/>
 <xsl:text>Code: </xsl:text><xsl:value-of select="/c:cdbml/c:cdbrecord/c:code/c:name" /> Version: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:code/c:version" /><xsl:value-of select="$newline"/>
 <xsl:value-of select="$newline"/>
 <xsl:text>Data

@@ -202,10 +202,6 @@ class CDBRecord(DataMixin):
             help_text='As Miller indices, e.g. (001)', blank=True)
 
     potential = models.ForeignKey(Potential, blank=True, null=True)
-    interatomic_potential_filename = models.CharField(max_length=100,
-        help_text='If provided, the filename or URL to a resource providing '
-            'the interatomic potential(s) used in the simulation', blank=True)
-    interatomic_potential_comment = models.TextField(blank=True)
     code_name = models.CharField(max_length=100, help_text='e.g. "LAMMPS"')
     code_version = models.CharField(max_length=20,
         help_text='e.g. "22 Aug 2018"')
@@ -273,14 +269,18 @@ class CDBRecord(DataMixin):
             attach_element(box_orientation_element, 'Z_orientation',
                            self.box_Z_orientation or 'MISSING')
 
-        if (self.interatomic_potential_filename or
-            self.interatomic_potential_comment):
-            PEElement = etree.SubElement(cdbrecordElement,
-                                         'interatomic_potential')
-            attach_optional_element(PEElement, 'filename',
-                           self.interatomic_potential_filename)
-            attach_optional_element(PEElement, 'comment',
-                           self.interatomic_potential_comment)
+        if self.potential:
+            if (self.potential.filename or self.potential.comment or
+                    self.potential.source):
+                PEElement = etree.SubElement(cdbrecordElement,
+                                             'interatomic_potential')
+                attach_optional_element(PEElement, 'filename',
+                               self.potential.filename)
+                attach_optional_element(PEElement, 'comment',
+                               self.potential.comment)
+                if self.potential.source:
+                    attach_optional_element(PEElement, 'doi',
+                                   self.potential.source.doi)
         codeElement = etree.SubElement(cdbrecordElement, 'code')
         attach_element(codeElement, 'name', self.code_name)
         attach_element(codeElement, 'version', self.code_version)

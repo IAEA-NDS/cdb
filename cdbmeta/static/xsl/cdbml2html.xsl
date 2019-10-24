@@ -84,6 +84,7 @@
 
     <p>Interatomic potential filename: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:filename" /></span></p>
     <p>Interatomic potential comment: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:comment" /></span></p>
+    <p>Interatomic potential doi: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:doi" /></span></p>
 
     <p>Code: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:code/c:name" /> Version: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:code/c:version" /></span></p>
 
