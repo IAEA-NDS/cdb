@@ -22,6 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 ADMIN_PAGES = False
 UPLOAD_PAGES = False
+DEBUG = False
 
 INSTALLED_APPS = [
     "django.contrib.contenttypes",
