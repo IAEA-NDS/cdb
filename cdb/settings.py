@@ -22,6 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 ADMIN_PAGES = False
 UPLOAD_PAGES = False
+DEBUG = False
 
 INSTALLED_APPS = [
     "django.contrib.contenttypes",
@@ -53,9 +54,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
-                "django.template.context_processors.debug",
                 "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ]
         },
@@ -92,6 +91,7 @@ if os.path.exists(f):
 if DEBUG:
     INSTALLED_APPS.append("debug_toolbar")
     MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
+    TEMPLATES[0]["OPTIONS"]["context_processors"].append("django.template.context_processors.debug")
 
 if ADMIN_PAGES:
     INSTALLED_APPS.extend(["django.contrib.admin", "django.contrib.auth"])
@@ -104,6 +104,7 @@ if ADMIN_PAGES:
         {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
         {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
     ]
+    TEMPLATES[0]["OPTIONS"]["context_processors"].append("django.contrib.auth.context_processors.auth")
 
 if UPLOAD_PAGES:
     INSTALLED_APPS.extend(["chunked_upload", "cdbdata"])

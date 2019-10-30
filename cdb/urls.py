@@ -22,12 +22,9 @@ from django.conf.urls.static import static
 
 import cdbmeta.views
 
-urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
+urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + \
+    [
     url(r'cdbmeta/', include('cdbmeta.urls'), name="search"),
-    url(r'accounts/', include('django.contrib.auth.urls')),
-    url(r'cdbdata/', include('cdbdata.urls')),
     url(r'refs/', include('refs.urls')),
     url(r'^contact/$',
         TemplateView.as_view(template_name='cdbmeta/contact.html'),
@@ -49,7 +46,9 @@ if settings.DEBUG:
 
 # add admin urls if this functionality is enabled
 if settings.ADMIN_PAGES:
-	urlpatterns.extend([url(r'^admin/', admin.site.urls)])
+	urlpatterns.extend([
+		url(r'^admin/', admin.site.urls),
+		url(r'accounts/', include('django.contrib.auth.urls'))])
 
 if settings.UPLOAD_PAGES:
 	urlpatterns.append(url(r'cdbdata/', include('cdbdata.urls')))
