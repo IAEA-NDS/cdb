@@ -1,9 +1,20 @@
 import sys
 filename = sys.argv[1]
+print(filename)
 
 HEADERS_ONLY = False
 
-print(filename)
+if HEADERS_ONLY:
+    with open(filename) as fi:
+        first_line = fi.readline().rstrip()
+        second_line = fi.readline().rstrip()
+        outname = filename + '.xyz.header'
+        with open(outname, 'w') as fo:
+            print(first_line, file=fo)
+            print(second_line, file=fo)
+        sys.exit()
+
+
 with open(filename) as fi:
     first_line = fi.readline().rstrip()
     for line in fi:
@@ -14,13 +25,15 @@ with open(filename) as fi:
             continue
         this_frame.append(line)
 
+header_name = filename + '.xyz.header'
+with open(header_name, 'w') as fo:
+    print(first_line, file=fo)
+    print(second_line, file=fo)
+
 outname = filename + '.xyz'
-if HEADERS_ONLY:
-    outname += '.header'
 with open(outname, 'w') as fo:
     print(first_line, file=fo)
     print(second_line, file=fo)
-    if not HEADERS_ONLY:
-        for line in this_frame:
-            fields = line.split()
-            print('{:>2}{:>13}{:>13}{:>13}'.format(*fields[:4]), file=fo)
+    for line in this_frame:
+        fields = line.split()
+        print('{:>2}{:>13}{:>13}{:>13}'.format(*fields[:4]), file=fo)

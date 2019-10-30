@@ -8,16 +8,21 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'cdb.settings'
 import django
 django.setup()
 
-attribution_pk = 12
-material_pk = 31
-potential_pk = 14
-atomic_number = 28
-archive_stem = '08b-ni-'
+attribution_pk = 5
+material_pk = 1
+potential_pk = 1
+atomic_number = 74
+
 dry_run = False
 
 
 from cdbmeta.models import CDBRecord
 from cdbmeta.models import Attribution, Material, Potential
+
+
+max_pk = CDBRecord.objects.all().order_by('-id')[0].id + 1
+archive_stem = '{:03x}-w-'.format(max_pk)
+
 
 attribution = Attribution.objects.get(pk=attribution_pk)
 material = Material.objects.get(pk=material_pk)
@@ -27,6 +32,7 @@ import glob
 E = sys.argv[1]
 
 archive_name = archive_stem + E + '.tar.gz'
+print(archive_name)
 
 filenames = glob.glob('./md.movie-' + str(E) + '-*.xyz.header')
 times = []
