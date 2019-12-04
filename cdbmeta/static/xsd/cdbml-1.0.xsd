@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
- xmlns="https://www-amdis.iaea.org/cdbml"
- targetNamespace="https://www-amdis.iaea.org/cdbml"
+ xmlns="https://amdis.iaea.org/cdbml"
+ targetNamespace="https://amdis.iaea.org/cdbml"
  elementFormDefault="qualified" attributeFormDefault="unqualified">
 
 <xs:complexType name="attributionType">
@@ -83,6 +83,7 @@
 
 <xs:complexType name="interatomic_potentialType">
     <xs:sequence>
+        <xs:element name="uri" type="xs:string" minOccurs="0" maxOccurs="1" />
         <xs:element name="filename" type="xs:string" minOccurs="0" maxOccurs="1" />
         <xs:element name="comment" type="xs:string" minOccurs="0" />
         <xs:element name="doi" type="xs:string" minOccurs="0" />

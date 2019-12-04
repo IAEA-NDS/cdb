@@ -24,7 +24,9 @@ import cdbmeta.views
 
 urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + \
     [
-    url(r'cdbmeta/', include('cdbmeta.urls'), name="search"),
+    url(r'cdbmeta/', include('cdbmeta.urls'), name='search'),
+    url(r'potential/(?P<potential_id>\d+)/$', cdbmeta.views.potential,
+        name='potential'),
     url(r'refs/', include('refs.urls')),
     url(r'^contact/$',
         TemplateView.as_view(template_name='cdbmeta/contact.html'),
@@ -32,7 +34,7 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + \
     url(r'^licence/$',
         TemplateView.as_view(template_name='cdbmeta/licence.html'),
         name="licence"),
-    url(r'^$', cdbmeta.views.home, name="home"),
+    url(r'^$', cdbmeta.views.home, name='home'),
     url(r'^$', 
         TemplateView.as_view(template_name='cdbmeta/index.html'),
         name="home"),

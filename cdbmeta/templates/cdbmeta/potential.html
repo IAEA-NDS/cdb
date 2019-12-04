@@ -1,0 +1,21 @@
+{% extends "cdbmeta/base.html" %}
+{% block meta_title %}Potential {{ potential.qualified_id }}{% endblock %}
+
+{% block content %}
+<h1>Potential {{ potential.qualified_id }}</h1>
+<div class="container">
+
+<ul>
+{% if potential.filename %}<li>Filename: <a href="{{ POTENTIAL_URL }}/{{ potential.filename }}">{{ potential.filename }}</a></li>{% endif %}
+{% if potential.source %}
+<li>DOI: {{ potential.source.doi }}</li>
+<li>Source: {{ potential.source.html|safe }}</li>
+{% endif %}
+{% if potential.comment %}
+<li>Comment:
+<div>{{ potential.comment }}</div></li>
+{% endif %}
+</ul>
+</div>
+{% endblock %}
+

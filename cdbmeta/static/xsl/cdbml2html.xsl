@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:c="https://www-amdis.iaea.org/cdbml">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:c="https://amdis.iaea.org/cdbml">
 
 <xsl:template match="/">
   <html>
@@ -23,7 +23,7 @@
         <h3>Publication</h3>
         <p>Publication DOI:
             <xsl:element name="a">
-                <xsl:attribute name="href">http://doi.org/<xsl:value-of select="c:doi"/></xsl:attribute>
+                <xsl:attribute name="href">https://doi.org/<xsl:value-of select="c:doi"/></xsl:attribute>
             <xsl:value-of select="c:doi"/>
             </xsl:element>
         </p>
@@ -82,6 +82,7 @@
         <xsl:value-of select="/c:cdbml/c:cdbrecord/c:simulation_box/c:box_orientation/c:Z_orientation"/>
     </p></xsl:if>
 
+    <p>Interatomic potential URI: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:uri" /></span></p>
     <p>Interatomic potential filename: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:filename" /></span></p>
     <p>Interatomic potential comment: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:comment" /></span></p>
     <p>Interatomic potential doi: <span class="value"><xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:doi" /></span></p>

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:c="https://www-amdis.iaea.org/cdbml">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:c="https://amdis.iaea.org/cdbml">
 <xsl:output method="text" />
 <xsl:variable name="newline" select="'&#xD;&#xA;'" />
 <xsl:template match="/">
@@ -12,7 +12,7 @@
 <xsl:text>=================</xsl:text><xsl:value-of select="$newline"/>
 <xsl:value-of select="$newline"/>
 <xsl:text>Contributor: </xsl:text><xsl:value-of select="c:name"/>, <xsl:value-of select="c:affiliation"/><xsl:value-of select="$newline"/>
-<xsl:text>Publication DOI: http://doi.org/</xsl:text><xsl:value-of select="c:doi"/>
+<xsl:text>Publication DOI: https://doi.org/</xsl:text><xsl:value-of select="c:doi"/>
 <xsl:value-of select="$newline"/><xsl:value-of select="$newline"/>
 <xsl:text>Acknowledgements
 ----------------</xsl:text>
@@ -51,6 +51,7 @@ Electronic stopping included? </xsl:text><xsl:value-of select="/c:cdbml/c:cdbrec
 <xsl:if test="/c:cdbml/c:cdbrecord/c:simulation_box/c:box_orientation">
 <xsl:text>Box orientation: </xsl:text><xsl:value-of select="/c:cdbml/c:cdbrecord/c:simulation_box/c:box_orientation/c:X_orientation"/>, <xsl:value-of select="/c:cdbml/c:cdbrecord/c:simulation_box/c:box_orientation/c:Y_orientation"/>, <xsl:value-of select="/c:cdbml/c:cdbrecord/c:simulation_box/c:box_orientation/c:Z_orientation"/><xsl:value-of select="$newline"/>
 </xsl:if>
+<xsl:text>Interatomic potential URI: </xsl:text><xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:uri" /><xsl:value-of select="$newline"/>
 <xsl:text>Interatomic potential filename: </xsl:text><xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:filename" /><xsl:value-of select="$newline"/>
 <xsl:text>Interatomic potential comment: </xsl:text><xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:comment" /><xsl:value-of select="$newline"/>
 <xsl:text>Interatomic potential doi: </xsl:text><xsl:value-of select="/c:cdbml/c:cdbrecord/c:interatomic_potential/c:doi" /><xsl:value-of select="$newline"/>

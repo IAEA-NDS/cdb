@@ -5,7 +5,7 @@ from miniclerval.models import Person
 from refs.models import Ref
 from lxml import etree
 from utils.xml import attach_element, attach_optional_element, true_false
-from cdb.settings import SITE_ROOT_URL
+from cdb.settings import SITE_ROOT_URL, POTENTIAL_URI_STEM 
 
 class Attribution(models.Model):
     person = models.ForeignKey(Person)
@@ -109,6 +109,10 @@ class Potential(models.Model):
     @property
     def qualified_id(self):
         return 'P{}'.format(self.id)
+
+    @property
+    def uri(self):
+        return POTENTIAL_URI_STEM + '/' + str(self.pk)
 
     @property
     def basename(self):
@@ -270,10 +274,11 @@ class CDBRecord(DataMixin):
                            self.box_Z_orientation or 'MISSING')
 
         if self.potential:
+            PEElement = etree.SubElement(cdbrecordElement,
+                                         'interatomic_potential')
+            attach_optional_element(PEElement, 'uri', self.potential.uri)
             if (self.potential.filename or self.potential.comment or
                     self.potential.source):
-                PEElement = etree.SubElement(cdbrecordElement,
-                                             'interatomic_potential')
                 attach_optional_element(PEElement, 'filename',
                                self.potential.filename)
                 attach_optional_element(PEElement, 'comment',
@@ -328,7 +333,7 @@ class CDBRecord(DataMixin):
             s.append('<?xml-stylesheet type="text/xsl" href='
                      '"{}/static/xsl/{}"?>'.format(SITE_ROOT_URL, xsl_name))
         s.extend([
-            '<cdbml version="1.0" xmlns="https://www-amdis.iaea.org/cdbml">',
+            '<cdbml version="1.0" xmlns="https://amdis.iaea.org/cdbml">',
             cdbml,
             '</cdbml>'])
             

@@ -1,5 +1,8 @@
 Notes
+-----
 
 scp -i ~/.ssh/cdb.pem ~/backups/db/cdb-201905270940.mysql ubuntu@ec2-18-220-219-221.us-east-2.compute.amazonaws.com:/home/ubuntu/transfer/
 
 ec2-18-220-219-221.us-east-2.compute.amazonaws.com
+
+python test_xml.py 4 | xmllint --schema ~/www/cdb/cdbmeta/static/xsd/cdbml-1.0.xsd --noout -

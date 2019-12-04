@@ -72,7 +72,7 @@ class Ref(models.Model):
                 # The DOI was entered as a URL already.
                 s_url = self.doi
             else:
-                s_url = 'http://dx.doi.org/{}'.format(self.doi)
+                s_url = 'https://dx.doi.org/{}'.format(self.doi)
             return self._make_url_html(s_url)
         return ''
 
