@@ -5,7 +5,7 @@ from miniclerval.models import Person
 from refs.models import Ref
 from lxml import etree
 from utils.xml import attach_element, attach_optional_element, true_false
-from cdb.settings import SITE_ROOT_URL, POTENTIAL_URI_STEM 
+from cdb.settings import SITE_ROOT_URL, POTENTIAL_URL, POTENTIAL_URI_STEM 
 
 class Attribution(models.Model):
     person = models.ForeignKey(Person)
@@ -114,14 +114,9 @@ class Potential(models.Model):
     def uri(self):
         return POTENTIAL_URI_STEM + '/' + str(self.pk)
 
-    @property
-    def basename(self):
-        return self.filename.split('/')[-1]
-
     def link(self):
-        if not self.filename:
-            return ''
-        return '<a href="{}">{}</a>'.format(self.filename, self.basename)
+        return '<a href="{}/{}">{}</a>'.format('potential', self.pk,
+                                               self.qualified_id)
 
     def __str__(self):
         s = '{}:'.format(self.qualified_id)
