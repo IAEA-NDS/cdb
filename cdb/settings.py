@@ -112,3 +112,6 @@ if UPLOAD_PAGES:
 
     def CHUNKED_UPLOAD_TO(instance, filename):
         return os.path.join(CHUNKED_UPLOAD_PATH, instance.filename)
+
+# Root of URI for the interatomic potentials: no trailing slash
+POTENTIAL_URI_STEM = 'https://cascadesdb.iaea.org/potential'
