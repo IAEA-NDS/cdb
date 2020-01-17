@@ -41,7 +41,8 @@ class Person(models.Model):
     """A class representing an individual researcher."""
 
     name = models.CharField(max_length=100)
-    institution = models.ForeignKey(Institution, null=True, blank=True)
+    institution = models.ForeignKey(Institution, null=True, blank=True,
+                                    on_delete=models.CASCADE)
     email = models.EmailField(blank=True)
     url = models.URLField(blank=True)
     notes = models.TextField(max_length=4000, blank=True)
