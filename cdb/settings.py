@@ -114,4 +114,5 @@ if UPLOAD_PAGES:
         return os.path.join(CHUNKED_UPLOAD_PATH, instance.filename)
 
 # Root of URI for the interatomic potentials: no trailing slash
-POTENTIAL_URI_STEM = 'https://cascadesdb.iaea.org/potential'
+POTENTIAL_URI_STEM = SITE_ROOT_URL + '/potential'
+POTENTIAL_URL = SITE_ROOT_URL + '/data/cdb-pot'
