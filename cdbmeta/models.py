@@ -8,9 +8,10 @@ from utils.xml import attach_element, attach_optional_element, true_false
 from cdb.settings import SITE_ROOT_URL, POTENTIAL_URL, POTENTIAL_URI_STEM 
 
 class Attribution(models.Model):
-    person = models.ForeignKey(Person)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
     publication_doi = models.CharField(max_length=50)
-    source = models.ForeignKey(Ref, blank=True, null=True)
+    source = models.ForeignKey(Ref, blank=True, null=True,
+                               on_delete=models.CASCADE)
     general_comments = models.TextField(blank=True)
     acknowledgements = models.TextField(blank=True)
 
@@ -81,7 +82,7 @@ class Material(models.Model):
     chemical_formula = models.CharField(max_length=100)
     structure = models.CharField(max_length=100, choices=STRUCTURE_CHOICES)
     lattice_parameters = models.OneToOneField(LatticeParameters,
-                                           blank=True, null=True)
+                           blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         s = '{} ({})'.format(self.chemical_formula, self.structure)
@@ -104,7 +105,8 @@ class Potential(models.Model):
         help_text='If provided, the filename or URL to a resource providing '
             'the interatomic potential(s) used in the simulation', blank=True)
     comment = models.TextField(blank=True)
-    source = models.ForeignKey(Ref, blank=True, null=True)
+    source = models.ForeignKey(Ref, blank=True, null=True,
+                               on_delete=models.CASCADE)
 
     @property
     def qualified_id(self):
@@ -157,9 +159,11 @@ class DataMixin(models.Model):
 
 class CDBRecord(DataMixin):
     attribution = models.ForeignKey(Attribution,
-        help_text='Person, publication DOI, comments and acknowledgements')
+        help_text='Person, publication DOI, comments and acknowledgements',
+        on_delete=models.CASCADE)
     material = models.ForeignKey(Material,
-        help_text='Chemical formula, structure and lattice parameters')
+        help_text='Chemical formula, structure and lattice parameters',
+        on_delete=models.CASCADE)
     has_surface = models.BooleanField('Does the simulation include a surface?',
                                       default=False)
     initially_perfect = models.BooleanField(
@@ -200,7 +204,8 @@ class CDBRecord(DataMixin):
     box_Z_orientation = models.CharField('Box Z-orientation', max_length=15,
             help_text='As Miller indices, e.g. (001)', blank=True)
 
-    potential = models.ForeignKey(Potential, blank=True, null=True)
+    potential = models.ForeignKey(Potential, blank=True, null=True,
+                                  on_delete=models.CASCADE)
     code_name = models.CharField(max_length=100, help_text='e.g. "LAMMPS"')
     code_version = models.CharField(max_length=20,
         help_text='e.g. "22 Aug 2018"')
