@@ -7,7 +7,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 // Common iaea.org tracking code
  ga('create', 'UA-3722317-1', 'auto');
  ga('send', 'pageview', {
-	'dimension1': 'NAPC',
+	'dimension1': 'NAPC/NDS',
 	'dimension2': 'NDS/AMDIS/CDB'
  });
 
