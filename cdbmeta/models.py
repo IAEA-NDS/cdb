@@ -9,7 +9,6 @@ from cdb.settings import SITE_ROOT_URL, POTENTIAL_URL, POTENTIAL_URI_STEM
 
 class Attribution(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
-    publication_doi = models.CharField(max_length=50)
     source = models.ForeignKey(Ref, blank=True, null=True,
                                on_delete=models.CASCADE)
     general_comments = models.TextField(blank=True)
@@ -17,6 +16,14 @@ class Attribution(models.Model):
 
     def __str__(self):
         return '{}: {}'.format(self.person.name, self.publication_doi)
+
+
+    @property
+    def publication_doi(self):
+        try:
+            return self.source.doi or '[No DOI]'
+        except AttributeError:
+            return '[No source Ref]'
 
     @property
     def qualified_id(self):
@@ -123,7 +130,7 @@ class Potential(models.Model):
     def __str__(self):
         s = '{}:'.format(self.qualified_id)
         if self.filename:
-            s = s + ' ' + str(self.basename) 
+            s = s + ' ' + str(self.filename) 
         if self.source:
             return s + ' ({})'.format(self.source)
         return s + ' [missing ref]'
