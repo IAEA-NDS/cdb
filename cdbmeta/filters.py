@@ -11,7 +11,7 @@ class CDBRecordFilter(django_filters.FilterSet):
             lookup_expr='icontains',
             label='Institution name')
     attribution__publication_doi = django_filters.CharFilter(
-            field_name='attribution__publication_doi', label='Publication DOI')
+            field_name='attribution__source__doi', label='Publication DOI')
     material__chemical_formula = django_filters.CharFilter(
             field_name='material__chemical_formula')
     material__structure = django_filters.CharFilter(
