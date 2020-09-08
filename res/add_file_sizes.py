@@ -1,3 +1,4 @@
+# add_file_sizes.py
 import os
 import sys
 import urllib.request
