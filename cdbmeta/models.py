@@ -418,6 +418,11 @@ class CDBRecord(DataMixin):
         d['columns'] = dcolumns
 
         d['code'] = {'name': self.code_name, 'version': self.code_version}
+        d['archive-name'] = self.archive_name
+        add_optional_kv(d, 'archive_filesize', self)
+        add_optional_kv(d, 'number-of-simulations', self, 'nsim')
+        add_optional_kv(d, 'initial-configuration-filename', self)
+        add_optional_kv(d, 'initial-configuration-comments', self)
         add_optional_kv(d, 'comments', self)
 
         return d
