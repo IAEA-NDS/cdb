@@ -1,7 +1,9 @@
 from django.db import models
 from django_countries.fields import CountryField
+from utils.mixins import SerializableModel
+from utils.serialize_utils import add_optional_kv
 
-class Institution(models.Model):
+class Institution(SerializableModel):
     """A class representing a physical research institution.
 
     A research institution in this context may be a university, university
@@ -9,6 +11,8 @@ class Institution(models.Model):
     It will usually have a single geographic location and a website.
 
     """
+
+    QPREFIX = 'I'
 
     # These are the fixed types of institution recognised by clerval.
     INSTITUTION_CHOICES = (
@@ -37,7 +41,13 @@ class Institution(models.Model):
     def __str__(self):
         return self.name
 
-class Person(models.Model):
+    def serialize(self):
+        d = {'qid': self.qualified_id, 'name': self.name,
+             'country': str(self.country.name)}
+        return d
+
+
+class Person(SerializableModel):
     """A class representing an individual researcher."""
 
     name = models.CharField(max_length=100)
@@ -76,3 +86,11 @@ class Person(models.Model):
         
         surname = ' '.join(surname_parts)
         return surname
+
+    def serialize(self):
+        d = {'qid': self.qualified_id, 'name': self.name}
+        add_optional_kv(d, 'institution', self, 'institution',
+                        'serialize') 
+        add_optional_kv(d, 'email', self)
+        add_optional_kv(d, 'url', self)
+        return d

@@ -3,7 +3,9 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from sortedm2m.fields import SortedManyToManyField
 from miniclerval.models import Person
 from refs.models import Ref
+import json
 from lxml import etree
+from utils.serialize_utils import add_optional_kv
 from utils.xml import attach_element, attach_optional_element, true_false
 from cdb.settings import SITE_ROOT_URL, POTENTIAL_URL, POTENTIAL_URI_STEM 
 
@@ -43,6 +45,16 @@ class Attribution(models.Model):
                                 self.acknowledgements)
         return attribElement
 
+    def serialize(self):
+        d = {'qid': self.qualified_id}
+        add_optional_kv(d, 'contact', self, 'person', 'serialize')
+        add_optional_kv(d, 'source_doi', self.source, 'doi')
+        add_optional_kv(d, 'source_url', self.source, 'url')
+        add_optional_kv(d, 'general-comments', self)
+        add_optional_kv(d, 'acknowledgements', self)
+        return d
+        
+
 class LatticeParameters(models.Model):
     # The leading spaces in verbose_name are a hack to stop Django from
     # capitalizing these field names in their form labels
@@ -70,6 +82,11 @@ class LatticeParameters(models.Model):
             ang_elm = etree.SubElement(lpElement, s_ang, units='deg')
             ang_elm.text = '{:.6f}'.format(getattr(self, s_ang))
         return lpElement
+
+    def serialize(self):
+        d = {'a': self.a, 'b': self.b, 'c': self.c,
+             'alpha': self.alpha, 'beta': self.beta, 'gamma': self.gamma}
+        return d
 
 
 class Material(models.Model):
@@ -106,6 +123,12 @@ class Material(models.Model):
         matElement.append(self.lattice_parameters.cdbml())
         return matElement
 
+    def serialize(self):
+        d = {'chemical-formula': self.chemical_formula,
+             'structure': self.structure,
+             'lattice-parameters': self.lattice_parameters.serialize(),
+            }
+        return d
 
 class Potential(models.Model):
     filename = models.CharField(max_length=100,
@@ -134,6 +157,14 @@ class Potential(models.Model):
         if self.source:
             return s + ' ({})'.format(self.source)
         return s + ' [missing ref]'
+
+    def serialize(self):
+        d = {}
+        add_optional_kv(d, 'filename', self)
+        add_optional_kv(d, 'comment', self)
+        add_optional_kv(d, 'source-doi', self.source, 'doi')
+        add_optional_kv(d, 'uri', self)
+        return d
 
 
 class DataColumn(models.Model):
@@ -345,3 +376,51 @@ class CDBRecord(DataMixin):
             '</cdbml>'])
             
         return '\n'.join(s)
+
+    def serialize(self):
+        d = {'qid': self.qualified_id,
+             'attribution': self.attribution.serialize(),
+             'material': self.material.serialize(),
+             'potential': self.potential.serialize(),
+            }
+        add_optional_kv(d, 'has-surface', self)
+        add_optional_kv(d, 'initially-perfect', self)
+        add_optional_kv(d, 'PKA-atomic-number', self, 'atomic_number')
+        add_optional_kv(d, 'PKA-energy', self, 'energy')
+        add_optional_kv(d, 'recoil', self)
+        add_optional_kv(d, 'electronic-stopping', self)
+        add_optional_kv(d, 'electronic-stopping-comment', self)
+        add_optional_kv(d, 'thermostat', self)
+        add_optional_kv(d, 'thermostat-comment', self)
+        add_optional_kv(d, 'input-filename', self)
+        add_optional_kv(d, 'simulation-time', self, 'total_simulation_time')
+        add_optional_kv(d, 'initial-temperature', self)
+
+        dbox = {}
+        add_optional_kv(dbox, 'box-X-length', self, 'box_X')
+        add_optional_kv(dbox, 'box-Y-length', self, 'box_Y')
+        add_optional_kv(dbox, 'box-Z-length', self, 'box_Z')
+        add_optional_kv(dbox, 'box-X-orientation', self, 'box_X_orientation')
+        add_optional_kv(dbox, 'box-Y-orientation', self, 'box_Y_orientation')
+        add_optional_kv(dbox, 'box-Z-orientation', self, 'box_Z_orientation')
+        d['simulation-box'] = dbox
+
+        dcolumns = [{'name': 'Element Symbol'},
+                    {'name': 'x', 'units': 'Å'},
+                    {'name': 'y', 'units': 'Å'},
+                    {'name': 'z', 'units': 'Å'},
+                   ]
+        for column in self.additional_columns.all():
+            dcolumn = {'name': column.name}
+            add_optional_kv(dcolumn, 'units', column)
+            add_optional_kv(dcolumn, 'description', column)
+            dcolumns.append(dcolumn)
+        d['columns'] = dcolumns
+
+        d['code'] = {'name': self.code_name, 'version': self.code_version}
+        add_optional_kv(d, 'comments', self)
+
+        return d
+
+    def as_json(self):
+        return json.dumps(self.serialize())

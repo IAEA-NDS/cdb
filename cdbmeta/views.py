@@ -20,6 +20,7 @@ _output_formats = {
     'xml': CDBOutputFormat(None, 'text/xml'),
     'html': CDBOutputFormat('cdbml2html.xsl', 'text/xml'),
     'txt': CDBOutputFormat('cdbml2txt.xsl', 'text/xml'),
+    'json': CDBOutputFormat(None, 'application/json'),
 }
 
 def home(request):
@@ -36,8 +37,12 @@ def cdbrecord(request, cdbrecord_id, fmt='html'):
     cdb_record = get_object_or_404(CDBRecord, pk=cdbrecord_id)
     xsl_name = _output_formats[fmt].stylesheet
     content_type = _output_formats[fmt].content_type
-    return HttpResponse(cdb_record.as_cdbml(xsl_name=xsl_name),
-                        content_type=content_type)
+    if fmt == 'json':
+        output_record = cdb_record.as_json()
+    else:
+        output_record = cdb_record.as_cdbml(xsl_name=xsl_name)
+    
+    return HttpResponse(output_record, content_type=content_type)
 
 def cdb_search(request):
     cdbrecord_list = CDBRecord.objects.all()

@@ -100,7 +100,8 @@
     <td>{{ cdbrecord.nsim }}</td>
     <td><a href="{% url 'cdbmeta:html' cdbrecord.pk %}">html</a> |
         <a href="{% url 'cdbmeta:xml' cdbrecord.pk %}">xml</a> |
-        <a href="{% url 'cdbmeta:txt' cdbrecord.pk %}">txt</a>
+        <a href="{% url 'cdbmeta:txt' cdbrecord.pk %}">txt</a> |
+        <a href="{% url 'cdbmeta:json' cdbrecord.pk %}">json</a>
     </td>
     <td><a href="/data/cdb/{{ cdbrecord.archive_name }}">{{ cdbrecord.qualified_id }}</a>{% if cdbrecord.archive_filesize %} ({{ cdbrecord.archive_filesize|filesizeformat }}){% endif %}</td>
 <td><a href="https://doi.org/{{ cdbrecord.attribution.publication_doi }}">link</a>{% if cdbrecord.attribution.source.bibtex %} | <a href="{% url 'refs:bibtex' cdbrecord.attribution.source.pk %}">bibtex</a>{% endif %}</td>

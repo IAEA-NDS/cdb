@@ -5,6 +5,8 @@ from . import views
 
 app_name = 'cdbmeta'
 urlpatterns = [
+    re_path(r'cdbrecord/json/(?P<cdbrecord_id>\d+)/$', views.cdbrecord,
+        {'fmt': 'json'}, name='json'),
     re_path(r'cdbrecord/xml/(?P<cdbrecord_id>\d+)/$', views.cdbrecord,
         {'fmt': 'xml'}, name='xml'),
     re_path(r'cdbrecord/txt/(?P<cdbrecord_id>\d+)/$', views.cdbrecord,
