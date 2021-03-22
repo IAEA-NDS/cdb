@@ -50,6 +50,8 @@ class Institution(SerializableModel):
 class Person(SerializableModel):
     """A class representing an individual researcher."""
 
+    QPREFIX = 'C'
+
     name = models.CharField(max_length=100)
     institution = models.ForeignKey(Institution, null=True, blank=True,
                                     on_delete=models.CASCADE)
