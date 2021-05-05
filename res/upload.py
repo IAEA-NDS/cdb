@@ -12,7 +12,7 @@ sys.path.append(webapp_path)
 os.environ['DJANGO_SETTINGS_MODULE'] = 'cdb.settings'
 
 
-N = 1
+N = 2
 cdb_archive_name = os.path.join(TRANSFER_DIR, 'cdb-{}.tar'.format(N))
 
 
