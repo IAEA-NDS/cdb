@@ -50,4 +50,5 @@ if settings.ADMIN_PAGES:
 		path(r'accounts/', include('django.contrib.auth.urls'))])
 
 if settings.UPLOAD_PAGES:
-	urlpatterns.append(path(r'cdbdata/', include('cdbdata.urls')))
+	#urlpatterns.append(path(r'cdbdata/', include('cdbdata.urls')))
+	urlpatterns.append(path(r'cdbdata/', include('fallkast.urls')))
