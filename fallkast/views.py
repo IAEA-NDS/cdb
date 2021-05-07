@@ -14,7 +14,7 @@ def upload_home(request):
 def upload(request):
     if request.method == 'POST' and request.FILES['uploaded_file']:
         uploaded_file = request.FILES['uploaded_file']
-        fs = FileSystemStorage(location=settings.DATA_DIR)
+        fs = FileSystemStorage(location=settings.UPLOAD_DIR)
         filename = fs.save(uploaded_file.name, uploaded_file)
         uploaded_file_url = fs.url(filename)
         return render(request, 'fallkast/upload.html', {
