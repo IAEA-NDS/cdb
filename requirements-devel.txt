@@ -2,7 +2,7 @@ appnope==0.1.0
 backcall==0.1.0
 certifi==2019.11.28
 decorator==4.4.1
-Django==2.2.20
+Django==2.2.21
 django-chunked-upload==2.0.0
 django-countries==5.5
 django-debug-toolbar==2.2.1
