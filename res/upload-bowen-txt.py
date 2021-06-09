@@ -218,7 +218,8 @@ material = Material.objects.get(chemical_formula=chemical_formula,
 
 potential = Potential.objects.get(pk=16)
 
-cdbrecord = CDBRecord(
+#cdbrecord = CDBRecord(
+cdbrecord = CDBRecord.objects.get_or_create(
     attribution = attribution,
     material = material,
     has_surface = has_surface,
@@ -244,3 +245,4 @@ cdbrecord = CDBRecord(
     archive_name = archive_name,
     nsim = nsim
 )
+
