@@ -7,7 +7,7 @@ import json
 from lxml import etree
 from utils.serialize_utils import add_optional_kv
 from utils.xml import attach_element, attach_optional_element, true_false
-from cdb.settings import SITE_ROOT_URL, POTENTIAL_URL, POTENTIAL_URI_STEM 
+from django.conf import settings
 
 class Attribution(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
@@ -144,7 +144,7 @@ class Potential(models.Model):
 
     @property
     def uri(self):
-        return POTENTIAL_URI_STEM + '/' + str(self.pk)
+        return settings.POTENTIAL_URI_STEM + '/' + str(self.pk)
 
     def link(self):
         return '<a href="{}/{}">{}</a>'.format('potential', self.pk,
@@ -369,7 +369,8 @@ class CDBRecord(DataMixin):
 
         if xsl_name:
             s.append('<?xml-stylesheet type="text/xsl" href='
-                     '"{}/static/xsl/{}"?>'.format(SITE_ROOT_URL, xsl_name))
+                     '"{}/static/xsl/{}"?>'.format(settings.SITE_ROOT_URL,
+                                                   xsl_name))
         s.extend([
             '<cdbml version="1.0" xmlns="https://amdis.iaea.org/cdbml">',
             cdbml,

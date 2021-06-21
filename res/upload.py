@@ -71,7 +71,7 @@ print('upload_only =', args.upload_only)
 import django
 django.setup()
 
-from cdb.settings import DATABASES
+from django.conf import settings
 
 def upload_transfer_files():
     print('Uploading files to destination', args.destination, '...')
@@ -121,8 +121,8 @@ def make_md5_hash_of_encrypted_archive():
 if not args.upload_only:
     ### Dump the database ###
     cmd = ['mysqldump',
-           '-u{}'.format(DATABASES['default']['USER']),
-           '-p{}'.format( DATABASES['default']['PASSWORD']),
+           '-u{}'.format(settings.DATABASES['default']['USER']),
+           '-p{}'.format(settings.DATABASES['default']['PASSWORD']),
            'cdb'
           ]
     dumpname = 'cdb.mysql'

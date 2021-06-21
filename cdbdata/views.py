@@ -9,8 +9,9 @@ from django.core.exceptions import PermissionDenied
 from .models import MyChunkedUpload
 import os
 from .templatetags.cdbdata_utils import filesize
-from cdb.settings import MEDIA_ROOT, CHUNKED_UPLOAD_PATH
-upload_dir = os.path.join(MEDIA_ROOT, CHUNKED_UPLOAD_PATH)
+
+from django.conf import settings
+upload_dir = os.path.join(settings.MEDIA_ROOT, settings.CHUNKED_UPLOAD_PATH)
 
 def is_allowed_to_upload(u):
     return u.groups.filter(name='data-provider').exists() or u.is_superuser

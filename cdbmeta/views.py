@@ -6,7 +6,7 @@ from collections import namedtuple
 import os
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from cdb.settings import DATA_DIR, POTENTIAL_URL
+from django.conf import settings
 from .models import CDBRecord, Material, Attribution, Potential
 from miniclerval.models import Person
 from refs.models import Ref
@@ -96,7 +96,7 @@ def refs(request):
     return render(request, 'cdbmeta/refs.html', c)
 
 def manifest(request):
-    filenames = os.listdir(DATA_DIR)
+    filenames = os.listdir(settings.DATA_DIR)
     filesizes = [(filename, os.path.getsize(os.path.join(DATA_DIR, filename)))
                     for filename in filenames]
     response = '\n'.join('{} {}'.format(*e) for e in filesizes)
@@ -104,5 +104,5 @@ def manifest(request):
 
 def potential(request, potential_id):
     potential = get_object_or_404(Potential, pk=potential_id)
-    c = {'potential': potential, 'POTENTIAL_URL': POTENTIAL_URL}
+    c = {'potential': potential, 'POTENTIAL_URL': settings.POTENTIAL_URL}
     return render(request, 'cdbmeta/potential.html', c)
