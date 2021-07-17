@@ -7,6 +7,7 @@ from django.views.generic import TemplateView
 import cdbmeta.views
 
 urlpatterns = [
+    path("api/", include("cdbmeta.api.urls")),
     path(r"cdbmeta/", include("cdbmeta.urls"), name="search"),
     re_path(
         r"potential/(?P<potential_id>\d+)/$", cdbmeta.views.potential, name="potential"
