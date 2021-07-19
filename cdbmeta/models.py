@@ -195,7 +195,14 @@ class DataMixin(models.Model):
         abstract=True
         verbose_name_plural = 'Data'
 
+
 class CDBRecord(DataMixin):
+    DEDICATED_COLUMNS = [
+        {'name': 'Element Symbol'},
+        {'name': 'x', 'units': 'Å'},
+        {'name': 'y', 'units': 'Å'},
+        {'name': 'z', 'units': 'Å'},
+    ]
     attribution = models.ForeignKey(Attribution,
         help_text='Person, publication DOI, comments and acknowledgements',
         on_delete=models.CASCADE)
@@ -406,11 +413,7 @@ class CDBRecord(DataMixin):
         add_optional_kv(dbox, 'box-Z-orientation', self, 'box_Z_orientation')
         d['simulation-box'] = dbox
 
-        dcolumns = [{'name': 'Element Symbol'},
-                    {'name': 'x', 'units': 'Å'},
-                    {'name': 'y', 'units': 'Å'},
-                    {'name': 'z', 'units': 'Å'},
-                   ]
+        dcolumns = self.DEDICATED_COLUMNS.copy()  # This is being reused in serializer
         for column in self.additional_columns.all():
             dcolumn = {'name': column.name}
             add_optional_kv(dcolumn, 'units', column)
