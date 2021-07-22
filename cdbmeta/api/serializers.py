@@ -223,7 +223,9 @@ class CreateMetaRecordSerializer(FieldConverterMixin, serializers.ModelSerialize
         if source_doi:
             ref, _ = meta_models.Ref.objects.get_or_create(doi=source_doi)
 
-        potential, _ = meta_models.Potential.objects.get_create(**potential, source=ref)
+        potential, _ = meta_models.Potential.objects.get_or_create(
+            **potential, source=ref
+        )
         return potential
 
     def create_related_field_material(self, validated_data: dict, field_name: str):
@@ -231,7 +233,7 @@ class CreateMetaRecordSerializer(FieldConverterMixin, serializers.ModelSerialize
         material["lattice_parameters"] = self.get_or_create_related_field(
             validated_data=material, field_name="lattice_parameters"
         )
-        material, _ = meta_models.Material.objects.get_create(**material)
+        material, _ = meta_models.Material.objects.get_or_create(**material)
         return material
 
     def create(self, validated_data):
