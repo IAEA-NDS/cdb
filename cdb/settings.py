@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "miniclerval",
     "refs",
     "cdbmeta",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [

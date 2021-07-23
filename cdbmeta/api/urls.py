@@ -1,4 +1,5 @@
 from django.urls import path
+
 from cdbmeta.api import views
 
 urlpatterns = [
