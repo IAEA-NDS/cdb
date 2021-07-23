@@ -6,9 +6,9 @@ from cdbmeta import models as meta_models
 
 class FieldConverterMixin:
     """
-    This mixin class is used to convert input fields like `lattice-parameters` into a
-    custom one. Because, in Python `lattice-parameters` is not a valid variable and
-    hence we can not define it as a class member.
+    This mixin class is used to convert input fields like `lattice-parameters`
+    into a custom one. Because, in Python `lattice-parameters` is not a valid
+    variable and hence we can not define it as a class member.
 
     Disclaimer:
     This is not a DRF/Django/Python feature and
@@ -40,7 +40,8 @@ class QualifiedIDField(serializers.Field):
         model_cls: the Django model class to search for the row/instance
         id_prefix: optional value to indicate the model.
             If not provided, will use the first letter of the model class
-        serializer: a DRF serializer class that will be used while serialization process
+        serializer: a DRF serializer class that will be used while
+            serialization process
     """
 
     default_error_messages = {
@@ -151,7 +152,8 @@ class DataColumnSerializer(serializers.ModelSerializer):
         fields = ["name", "units", "description"]
 
 
-class CreateMetaRecordSerializer(FieldConverterMixin, serializers.ModelSerializer):
+class CreateMetaRecordSerializer(FieldConverterMixin,
+                                 serializers.ModelSerializer):
     field_map = {
         "PKA-atomic-number": "atomic_number",
         "PKA-energy": "energy",
@@ -215,20 +217,23 @@ class CreateMetaRecordSerializer(FieldConverterMixin, serializers.ModelSerialize
         )
         return lattice_parameters
 
-    def create_related_field_potential(self, validated_data: dict, field_name: str):
+    def create_related_field_potential(self, validated_data: dict,
+                                       field_name: str):
         potential = validated_data[field_name]
 
         ref = None
         source_doi = potential.pop("source_doi", None)
+        filename = potential.pop('filename', '')
+        comment = potential.pop('comment', '')
         if source_doi:
             ref, _ = meta_models.Ref.objects.get_or_create(doi=source_doi)
 
         potential, _ = meta_models.Potential.objects.get_or_create(
-            **potential, source=ref
-        )
+            **potential, source=ref, filename=filename, comment=comment)
         return potential
 
-    def create_related_field_material(self, validated_data: dict, field_name: str):
+    def create_related_field_material(self, validated_data: dict,
+                                      field_name: str):
         material = validated_data[field_name]
         material["lattice_parameters"] = self.get_or_create_related_field(
             validated_data=material, field_name="lattice_parameters"
@@ -252,9 +257,6 @@ class CreateMetaRecordSerializer(FieldConverterMixin, serializers.ModelSerialize
         validated_data["potential"] = self.get_or_create_related_field(
             validated_data=validated_data_copy, field_name="potential"
         )
-        validated_data["potential"] = self.get_or_create_related_field(
-            validated_data=validated_data_copy, field_name="potential"
-        )
 
         columns = validated_data.pop("columns", [])
         meta_record = meta_models.CDBRecord.objects.create(**validated_data)
@@ -263,7 +265,8 @@ class CreateMetaRecordSerializer(FieldConverterMixin, serializers.ModelSerialize
             if column_data in meta_models.CDBRecord.DEDICATED_COLUMNS:
                 continue
 
-            data_column, _ = meta_models.DataColumn.objects.get_or_create(**column_data)
+            data_column, _ = meta_models.DataColumn.objects.get_or_create(
+                                                                **column_data)
             meta_record.additional_columns.add(data_column)
 
         return meta_record
