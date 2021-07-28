@@ -80,12 +80,25 @@ class QualifiedIDField(serializers.Field):
         return value.pk
 
 
-class AttributionSerializer(serializers.ModelSerializer):
+class PersonSerializer(serializers.ModelSerializer):
+    qid = QualifiedIDField(model_cls=meta_models.Person, id_prefix="C")
+
+    class Meta:
+        model = meta_models.Person
+        fields = ["qid"]
+
+
+class AttributionSerializer(FieldConverterMixin, serializers.ModelSerializer):
+    field_map = {
+        "contact": "person",
+    }
     qid = QualifiedIDField(model_cls=meta_models.Attribution, id_prefix="A")
+    source_doi = serializers.CharField(required=False)
+    person = PersonSerializer()
 
     class Meta:
         model = meta_models.Attribution
-        fields = ["qid"]
+        fields = ["qid", "person", "source_doi"]
 
 
 class LatticeParameterSerializer(serializers.ModelSerializer):
@@ -240,6 +253,19 @@ class CreateMetaRecordSerializer(FieldConverterMixin, serializers.ModelSerialize
         )
         material, _ = meta_models.Material.objects.get_or_create(**material)
         return material
+
+    def create_related_field_attribution(self, validated_data: dict, field_name: str):
+        attribution = validated_data[field_name]
+        source_doi = attribution.pop("source_doi", None)
+        if source_doi:
+            ref, _ = meta_models.Ref.objects.get_or_create(doi=source_doi)
+            attribution["source"] = ref
+
+        attribution["person"] = self.get_or_create_related_field(
+            validated_data=attribution, field_name="person"
+        )
+        attribution, _ = meta_models.Attribution.objects.get_or_create(**attribution)
+        return attribution
 
     def _create(self, validated_data):
         validated_data_copy = validated_data.copy()
