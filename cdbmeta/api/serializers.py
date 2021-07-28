@@ -52,6 +52,7 @@ class QualifiedIDField(serializers.Field):
     }
 
     def __init__(self, model_cls, id_prefix=None, serializer=None, **kwargs):
+        kwargs.setdefault("required", False)
         self.model_cls = model_cls
         self.serializer_cls = serializer
 
