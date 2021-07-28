@@ -285,7 +285,7 @@ class CreateMetaRecordSerializer(FieldConverterMixin, serializers.ModelSerialize
         )
 
         columns = validated_data.pop("columns", [])
-        meta_record = meta_models.CDBRecord.objects.create(**validated_data)
+        meta_record, _ = meta_models.CDBRecord.objects.get_or_create(**validated_data)
 
         for column_data in columns:
             if column_data in meta_models.CDBRecord.DEDICATED_COLUMNS:
