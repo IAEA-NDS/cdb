@@ -94,7 +94,7 @@ class AttributionSerializer(FieldConverterMixin, serializers.ModelSerializer):
     }
     qid = QualifiedIDField(model_cls=meta_models.Attribution, id_prefix="A")
     source_doi = serializers.CharField(required=False)
-    person = PersonSerializer()
+    person = PersonSerializer(required=False)
 
     class Meta:
         model = meta_models.Attribution
@@ -190,6 +190,8 @@ class CreateMetaRecordSerializer(FieldConverterMixin, serializers.ModelSerialize
     class Meta:
         model = meta_models.CDBRecord
         fields = [
+            "additional_columns",
+            "archive_filesize",
             "archive_name",
             "atomic_number",
             "attribution",
@@ -199,9 +201,12 @@ class CreateMetaRecordSerializer(FieldConverterMixin, serializers.ModelSerialize
             "electronic_stopping",
             "energy",
             "has_surface",
+            "initial_configuration_comments",
+            "initial_configuration_filename",
             "initial_temperature",
             "initially_perfect",
             "material",
+            "nsim",
             "potential",
             "recoil",
             "simulation_box",
