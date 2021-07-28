@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
@@ -152,8 +153,7 @@ class DataColumnSerializer(serializers.ModelSerializer):
         fields = ["name", "units", "description"]
 
 
-class CreateMetaRecordSerializer(FieldConverterMixin,
-                                 serializers.ModelSerializer):
+class CreateMetaRecordSerializer(FieldConverterMixin, serializers.ModelSerializer):
     field_map = {
         "PKA-atomic-number": "atomic_number",
         "PKA-energy": "energy",
@@ -217,23 +217,22 @@ class CreateMetaRecordSerializer(FieldConverterMixin,
         )
         return lattice_parameters
 
-    def create_related_field_potential(self, validated_data: dict,
-                                       field_name: str):
+    def create_related_field_potential(self, validated_data: dict, field_name: str):
         potential = validated_data[field_name]
 
         ref = None
         source_doi = potential.pop("source_doi", None)
-        filename = potential.pop('filename', '')
-        comment = potential.pop('comment', '')
+        filename = potential.pop("filename", "")
+        comment = potential.pop("comment", "")
         if source_doi:
             ref, _ = meta_models.Ref.objects.get_or_create(doi=source_doi)
 
         potential, _ = meta_models.Potential.objects.get_or_create(
-            **potential, source=ref, filename=filename, comment=comment)
+            **potential, source=ref, filename=filename, comment=comment
+        )
         return potential
 
-    def create_related_field_material(self, validated_data: dict,
-                                      field_name: str):
+    def create_related_field_material(self, validated_data: dict, field_name: str):
         material = validated_data[field_name]
         material["lattice_parameters"] = self.get_or_create_related_field(
             validated_data=material, field_name="lattice_parameters"
@@ -241,7 +240,7 @@ class CreateMetaRecordSerializer(FieldConverterMixin,
         material, _ = meta_models.Material.objects.get_or_create(**material)
         return material
 
-    def create(self, validated_data):
+    def _create(self, validated_data):
         validated_data_copy = validated_data.copy()
 
         self_nested_attrs = ["simulation_box", "code"]
@@ -265,8 +264,11 @@ class CreateMetaRecordSerializer(FieldConverterMixin,
             if column_data in meta_models.CDBRecord.DEDICATED_COLUMNS:
                 continue
 
-            data_column, _ = meta_models.DataColumn.objects.get_or_create(
-                                                                **column_data)
+            data_column, _ = meta_models.DataColumn.objects.get_or_create(**column_data)
             meta_record.additional_columns.add(data_column)
 
         return meta_record
+
+    def create(self, validated_data):
+        with transaction.atomic():
+            return self._create(validated_data=validated_data)
