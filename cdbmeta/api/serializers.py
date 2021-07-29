@@ -98,7 +98,7 @@ class AttributionSerializer(FieldConverterMixin, serializers.ModelSerializer):
 
     class Meta:
         model = meta_models.Attribution
-        fields = ["qid", "person", "source_doi"]
+        fields = ["qid", "person", "source_doi", "acknowledgements"]
 
 
 class LatticeParameterSerializer(serializers.ModelSerializer):
@@ -175,10 +175,12 @@ class CreateMetaRecordSerializer(FieldConverterMixin, serializers.ModelSerialize
         "simulation-box": "simulation_box",
         "archive-name": "archive_name",
         "electronic-stopping": "electronic_stopping",
+        "electronic-stopping-comment": "electronic_stopping_comment",
         "has-surface": "has_surface",
         "initial-temperature": "initial_temperature",
         "initially-perfect": "initially_perfect",
         "thermostat-comment": "thermostat_comment",
+        "number-of-simulations": "nsim",
     }
     attribution = AttributionSerializer()
     material = MaterialSerializer()
@@ -199,6 +201,7 @@ class CreateMetaRecordSerializer(FieldConverterMixin, serializers.ModelSerialize
             "columns",
             "comments",
             "electronic_stopping",
+            "electronic_stopping_comment",
             "energy",
             "has_surface",
             "initial_configuration_comments",
@@ -213,6 +216,7 @@ class CreateMetaRecordSerializer(FieldConverterMixin, serializers.ModelSerialize
             "thermostat",
             "thermostat_comment",
             "total_simulation_time",
+            "nsim",
         ]
 
     def get_or_create_related_field(
