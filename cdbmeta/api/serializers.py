@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
@@ -51,6 +52,7 @@ class QualifiedIDField(serializers.Field):
     }
 
     def __init__(self, model_cls, id_prefix=None, serializer=None, **kwargs):
+        kwargs.setdefault("required", False)
         self.model_cls = model_cls
         self.serializer_cls = serializer
 
@@ -78,12 +80,25 @@ class QualifiedIDField(serializers.Field):
         return value.pk
 
 
-class AttributionSerializer(serializers.ModelSerializer):
+class PersonSerializer(serializers.ModelSerializer):
+    qid = QualifiedIDField(model_cls=meta_models.Person, id_prefix="C")
+
+    class Meta:
+        model = meta_models.Person
+        fields = ["qid"]
+
+
+class AttributionSerializer(FieldConverterMixin, serializers.ModelSerializer):
+    field_map = {
+        "contact": "person",
+    }
     qid = QualifiedIDField(model_cls=meta_models.Attribution, id_prefix="A")
+    source_doi = serializers.CharField(required=False)
+    person = PersonSerializer(required=False)
 
     class Meta:
         model = meta_models.Attribution
-        fields = ["qid"]
+        fields = ["qid", "person", "source_doi"]
 
 
 class LatticeParameterSerializer(serializers.ModelSerializer):
@@ -152,8 +167,7 @@ class DataColumnSerializer(serializers.ModelSerializer):
         fields = ["name", "units", "description"]
 
 
-class CreateMetaRecordSerializer(FieldConverterMixin,
-                                 serializers.ModelSerializer):
+class CreateMetaRecordSerializer(FieldConverterMixin, serializers.ModelSerializer):
     field_map = {
         "PKA-atomic-number": "atomic_number",
         "PKA-energy": "energy",
@@ -176,6 +190,8 @@ class CreateMetaRecordSerializer(FieldConverterMixin,
     class Meta:
         model = meta_models.CDBRecord
         fields = [
+            "additional_columns",
+            "archive_filesize",
             "archive_name",
             "atomic_number",
             "attribution",
@@ -185,9 +201,12 @@ class CreateMetaRecordSerializer(FieldConverterMixin,
             "electronic_stopping",
             "energy",
             "has_surface",
+            "initial_configuration_comments",
+            "initial_configuration_filename",
             "initial_temperature",
             "initially_perfect",
             "material",
+            "nsim",
             "potential",
             "recoil",
             "simulation_box",
@@ -217,23 +236,22 @@ class CreateMetaRecordSerializer(FieldConverterMixin,
         )
         return lattice_parameters
 
-    def create_related_field_potential(self, validated_data: dict,
-                                       field_name: str):
+    def create_related_field_potential(self, validated_data: dict, field_name: str):
         potential = validated_data[field_name]
 
         ref = None
         source_doi = potential.pop("source_doi", None)
-        filename = potential.pop('filename', '')
-        comment = potential.pop('comment', '')
+        filename = potential.pop("filename", "")
+        comment = potential.pop("comment", "")
         if source_doi:
             ref, _ = meta_models.Ref.objects.get_or_create(doi=source_doi)
 
         potential, _ = meta_models.Potential.objects.get_or_create(
-            **potential, source=ref, filename=filename, comment=comment)
+            **potential, source=ref, filename=filename, comment=comment
+        )
         return potential
 
-    def create_related_field_material(self, validated_data: dict,
-                                      field_name: str):
+    def create_related_field_material(self, validated_data: dict, field_name: str):
         material = validated_data[field_name]
         material["lattice_parameters"] = self.get_or_create_related_field(
             validated_data=material, field_name="lattice_parameters"
@@ -241,7 +259,20 @@ class CreateMetaRecordSerializer(FieldConverterMixin,
         material, _ = meta_models.Material.objects.get_or_create(**material)
         return material
 
-    def create(self, validated_data):
+    def create_related_field_attribution(self, validated_data: dict, field_name: str):
+        attribution = validated_data[field_name]
+        source_doi = attribution.pop("source_doi", None)
+        if source_doi:
+            ref, _ = meta_models.Ref.objects.get_or_create(doi=source_doi)
+            attribution["source"] = ref
+
+        attribution["person"] = self.get_or_create_related_field(
+            validated_data=attribution, field_name="person"
+        )
+        attribution, _ = meta_models.Attribution.objects.get_or_create(**attribution)
+        return attribution
+
+    def _create(self, validated_data):
         validated_data_copy = validated_data.copy()
 
         self_nested_attrs = ["simulation_box", "code"]
@@ -259,14 +290,17 @@ class CreateMetaRecordSerializer(FieldConverterMixin,
         )
 
         columns = validated_data.pop("columns", [])
-        meta_record = meta_models.CDBRecord.objects.create(**validated_data)
+        meta_record, _ = meta_models.CDBRecord.objects.get_or_create(**validated_data)
 
         for column_data in columns:
             if column_data in meta_models.CDBRecord.DEDICATED_COLUMNS:
                 continue
 
-            data_column, _ = meta_models.DataColumn.objects.get_or_create(
-                                                                **column_data)
+            data_column, _ = meta_models.DataColumn.objects.get_or_create(**column_data)
             meta_record.additional_columns.add(data_column)
 
         return meta_record
+
+    def create(self, validated_data):
+        with transaction.atomic():
+            return self._create(validated_data=validated_data)
