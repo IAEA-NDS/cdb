@@ -69,7 +69,7 @@ class QualifiedIDField(serializers.Field):
         pk_integer = int(data[self._prefix_len :])
         try:
             return self.model_cls.objects.get(pk=pk_integer)
-        except self.model_cls.DoesNotExists:
+        except self.model_cls.DoesNotExist:
             self.fail("does_not_exist", pk_value=data)
         except (TypeError, ValueError):
             self.fail("incorrect_type", data_type=type(data).__name__)
