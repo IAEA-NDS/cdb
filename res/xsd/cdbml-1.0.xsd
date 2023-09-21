@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+ xmlns="https://amdis.iaea.org/cdbml"
+ targetNamespace="https://amdis.iaea.org/cdbml"
+ elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+<xs:complexType name="attributionType">
+    <xs:sequence>
+        <xs:element name="name" type="xs:string" maxOccurs="1" />
+        <xs:element name="affiliation" type="xs:string" maxOccurs="1" />
+        <xs:element name="doi" type="xs:string" maxOccurs="1" />
+        <xs:element name="comments" type="xs:string" minOccurs="0"/>
+        <xs:element name="acknowledgements" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" />
+</xs:complexType>
+
+<xs:complexType name="physical_quantityType">
+    <xs:simpleContent>
+    <xs:extension base="xs:string">
+        <xs:attribute name="units" type="xs:string" />
+    </xs:extension>
+    </xs:simpleContent>
+</xs:complexType>
+<xs:complexType name="lattice_parametersType">
+    <xs:sequence>
+        <xs:element name="a" type="physical_quantityType" maxOccurs="1" />
+        <xs:element name="b" type="physical_quantityType" maxOccurs="1" />
+        <xs:element name="c" type="physical_quantityType" maxOccurs="1" />
+        <xs:element name="alpha" type="physical_quantityType" maxOccurs="1" />
+        <xs:element name="beta" type="physical_quantityType" maxOccurs="1" />
+        <xs:element name="gamma" type="physical_quantityType" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" />
+</xs:complexType>
+
+<xs:complexType name="materialType">
+    <xs:sequence>
+        <xs:element name="formula" type="xs:string" maxOccurs="1" />
+        <xs:element name="structure" type="xs:string" maxOccurs="1" />
+        <xs:element name="lattice_parameters" type="lattice_parametersType" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" />
+</xs:complexType>
+
+<xs:simpleType name="true_falseType">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="true"/>
+    <xs:enumeration value="false"/>
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="atomic_numberType">
+  <xs:restriction base="xs:integer">
+    <xs:minInclusive value="1"/>
+    <xs:maxInclusive value="118"/>
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:complexType name="PKAType">
+    <xs:sequence>
+        <xs:element name="energy" type="physical_quantityType" maxOccurs="1" />
+        <xs:element name="recoil" type="true_falseType" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" />
+</xs:complexType>
+
+<xs:complexType name="box_orientationType">
+    <xs:sequence>
+        <xs:element name="X_orientation" type="xs:string" maxOccurs="1" />
+        <xs:element name="Y_orientation" type="xs:string" maxOccurs="1" />
+        <xs:element name="Z_orientation" type="xs:string" maxOccurs="1" />
+    </xs:sequence>
+</xs:complexType>
+<xs:complexType name="simulation_boxType">
+    <xs:sequence>
+        <xs:element name="box_X_length" type="physical_quantityType" maxOccurs="1" />
+        <xs:element name="box_Y_length" type="physical_quantityType" maxOccurs="1" />
+        <xs:element name="box_Z_length" type="physical_quantityType" maxOccurs="1" />
+        <xs:element name="box_orientation" type="box_orientationType" minOccurs="0" />
+    </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="interatomic_potentialType">
+    <xs:sequence>
+        <xs:element name="uri" type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="filename" type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="comment" type="xs:string" minOccurs="0" />
+        <xs:element name="doi" type="xs:string" minOccurs="0" />
+    </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="codeType">
+    <xs:sequence>
+        <xs:element name="name" type="xs:string" maxOccurs="1" />
+        <xs:element name="version" type="xs:string" minOccurs="1" />
+    </xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="columnType">
+    <xs:sequence>
+        <xs:element name="name" type="xs:string" maxOccurs="1" />
+        <xs:element name="units" type="xs:string" minOccurs="0" />
+        <xs:element name="description" type="xs:string" minOccurs="0" />
+    </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="columnsType">
+    <xs:sequence>
+        <xs:element name="column" type="columnType" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="dataType">
+    <xs:sequence>
+        <xs:element name="archive_name" type="xs:string" maxOccurs="1" />
+        <xs:element name="columns" type="columnsType" maxOccurs="1" />
+        <xs:element name="comments" type="xs:string" minOccurs="0" />
+    </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="cdbrecordType">
+    <xs:sequence>
+    <xs:element name="attribution" type="attributionType" maxOccurs="1" />
+    <xs:element name="material" type="materialType" maxOccurs="1" />
+    <xs:element name="has_surface" type="true_falseType" maxOccurs="1" />
+    <xs:element name="initially_perfect" type="true_falseType" maxOccurs="1" />
+    <xs:element name="PKA_atomic_number" type="atomic_numberType" maxOccurs="1" />
+    <xs:element name="PKA" type="PKAType" maxOccurs="1" />
+    <xs:element name="electronic_stopping" type="true_falseType" maxOccurs="1" />
+    <xs:element name="electronic_stopping_comment" type="xs:string" minOccurs="0" />
+    <xs:element name="thermostat" type="true_falseType" maxOccurs="1" />
+    <xs:element name="thermostat_comment" type="xs:string" minOccurs="0" />
+    <xs:element name="input_filename" type="xs:string" minOccurs="0"/>
+    <xs:element name="simulation_time" type="physical_quantityType" maxOccurs="1" />
+    <xs:element name="initial_temperature" type="physical_quantityType" maxOccurs="1"/>
+
+    <xs:element name="simulation_box" type="simulation_boxType" maxOccurs="1" />
+
+    <xs:element name="interatomic_potential" type="interatomic_potentialType" minOccurs="0"/>
+    <xs:element name="code" type="codeType" maxOccurs="1"/>
+    <xs:element name="data" type="dataType" maxOccurs="1"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" />
+</xs:complexType>
+
+<xs:element name="cdbml">
+<xs:complexType>
+    <xs:sequence>
+    <xs:element name="cdbrecord" type="cdbrecordType" maxOccurs="unbounded" />
+    </xs:sequence>
+
+    <xs:attribute name="version" type="xs:string" />
+</xs:complexType>
+</xs:element>
+
+</xs:schema>
+
