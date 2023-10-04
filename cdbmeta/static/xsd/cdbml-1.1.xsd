@@ -98,24 +98,9 @@
 </xs:complexType>
 
 
-<xs:complexType name="columnType">
-    <xs:sequence>
-        <xs:element name="name" type="xs:string" maxOccurs="1" />
-        <xs:element name="units" type="xs:string" minOccurs="0" />
-        <xs:element name="description" type="xs:string" minOccurs="0" />
-    </xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="columnsType">
-    <xs:sequence>
-        <xs:element name="column" type="columnType" minOccurs="1" maxOccurs="unbounded" />
-    </xs:sequence>
-</xs:complexType>
-
 <xs:complexType name="dataType">
     <xs:sequence>
         <xs:element name="archive_name" type="xs:string" maxOccurs="1" />
-        <xs:element name="columns" type="columnsType" maxOccurs="1" />
         <xs:element name="comments" type="xs:string" minOccurs="0" />
     </xs:sequence>
 </xs:complexType>

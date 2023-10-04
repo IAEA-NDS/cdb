@@ -29,7 +29,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "sortedm2m",
     "django_countries",
     "miniclerval",
     "refs",
@@ -118,3 +117,5 @@ if UPLOAD_PAGES:
 # Root of URI for the interatomic potentials: no trailing slash
 POTENTIAL_URI_STEM = SITE_ROOT_URL + '/potential'
 POTENTIAL_URL = SITE_ROOT_URL + '/data/cdb-pot'
+
+CDBML_VERSION = '1.1'

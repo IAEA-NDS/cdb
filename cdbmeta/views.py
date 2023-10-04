@@ -18,8 +18,8 @@ APPROX_COMPRESSION_RATIO = 5
 CDBOutputFormat = namedtuple('CDBOutputFormat', ('stylesheet', 'content_type'))
 _output_formats = {
     'xml': CDBOutputFormat(None, 'text/xml'),
-    'html': CDBOutputFormat('cdbml2html.xsl', 'text/xml'),
-    'txt': CDBOutputFormat('cdbml2txt.xsl', 'text/xml'),
+    'html': CDBOutputFormat(f'cdbml2html-{settings.CDBML_VERSION}.xsl', 'text/xml'),
+    'txt': CDBOutputFormat(f'cdbml2txt-{settings.CDBML_VERSION}.xsl', 'text/xml'),
     'json': CDBOutputFormat(None, 'application/json'),
 }
 

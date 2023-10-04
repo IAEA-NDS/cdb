@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:c="https://amdis.iaea.org/cdbml">
+<xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:c="https://amdis.iaea.org/cdbml">
 <xsl:output method="text" />
 <xsl:variable name="newline" select="'&#xD;&#xA;'" />
 <xsl:template match="/">
@@ -60,13 +60,6 @@ Electronic stopping included? </xsl:text><xsl:value-of select="/c:cdbml/c:cdbrec
 <xsl:text>Data
 ====</xsl:text><xsl:value-of select="$newline"/>
 <xsl:text>Data archive name: </xsl:text><xsl:value-of select="/c:cdbml/c:cdbrecord/c:data/c:archive_name" /><xsl:value-of select="$newline"/>
-<xsl:value-of select="$newline"/>
-<xsl:text>Columns
--------
-Position | Name | Units</xsl:text>
-<xsl:for-each select="/c:cdbml/c:cdbrecord/c:data/c:columns/c:column">
-<xsl:value-of select="position()" /> | <xsl:value-of select="c:name" /> | <xsl:value-of select="c:units" /><xsl:value-of select="$newline"/>
-</xsl:for-each>
 <xsl:value-of select="$newline"/>
 <xsl:text>Comments
 --------</xsl:text><xsl:value-of select="$newline"/>

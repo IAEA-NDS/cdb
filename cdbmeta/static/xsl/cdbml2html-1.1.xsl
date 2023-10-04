@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:c="https://amdis.iaea.org/cdbml">
+<xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:c="https://amdis.iaea.org/cdbml">
 
 <xsl:template match="/">
   <html>
@@ -96,20 +96,6 @@
     <div class="card-header"><h2>Data</h2></div>
     <div class="card-body">
     <p>Data archive name: <xsl:value-of select="/c:cdbml/c:cdbrecord/c:data/c:archive_name" /></p>
-
-    <h3>Columns</h3>
-    <table class="table">
-    <thead><tr><th>Position</th><th>Name</th><th>Units</th></tr></thead>
-    <tbody>
-    <xsl:for-each select="/c:cdbml/c:cdbrecord/c:data/c:columns/c:column">
-    <tr>
-        <td><xsl:value-of select="position()" /></td>
-        <td><xsl:value-of select="c:name" /></td>
-        <td><xsl:value-of select="c:units" /></td>
-    </tr>
-    </xsl:for-each>
-    </tbody>
-    </table>
     </div>
     </div>
 

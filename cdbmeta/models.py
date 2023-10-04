@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-from sortedm2m.fields import SortedManyToManyField
 from miniclerval.models import Person
 from refs.models import Ref
 import json
@@ -178,7 +177,7 @@ class DataColumn(models.Model):
         return self.name
 
 
-class DataMixin(models.Model):
+class CDBRecord(models.Model):
     archive_name = models.CharField(max_length=100)
     archive_filesize = models.BigIntegerField(
                 validators=[MinValueValidator(0),], blank=True, null=True)
@@ -188,21 +187,8 @@ class DataMixin(models.Model):
         help_text='If provided, the filename of the .xyz file giving the '
                   'initial state of the material in the simulation')
     initial_configuration_comments = models.TextField(blank=True)
-    additional_columns = SortedManyToManyField(DataColumn, blank=True)
     comments = models.TextField(blank=True)
 
-    class Meta:
-        abstract=True
-        verbose_name_plural = 'Data'
-
-
-class CDBRecord(DataMixin):
-    DEDICATED_COLUMNS = [
-        {'name': 'Element Symbol'},
-        {'name': 'x', 'units': 'Å'},
-        {'name': 'y', 'units': 'Å'},
-        {'name': 'z', 'units': 'Å'},
-    ]
     attribution = models.ForeignKey(Attribution,
         help_text='Person, publication DOI, comments and acknowledgements',
         on_delete=models.CASCADE)
@@ -344,24 +330,8 @@ class CDBRecord(DataMixin):
                                     self.initial_configuration_comments)
         dataElement = etree.SubElement(cdbrecordElement, 'data')
         attach_element(dataElement, 'archive_name', self.archive_name)
-        colsElement = etree.SubElement(dataElement, 'columns')
         attach_optional_element(dataElement, 'comments',
                                 self.comments)
-
-        def column_element(name, units=None, description=None):
-            colElement = etree.Element('column')
-            attach_element(colElement, 'name', name)
-            attach_optional_element(colElement, 'units', units)
-            attach_optional_element(colElement, 'description', description)
-            return colElement
-
-        colsElement.append(column_element('Element Symbol'))
-        colsElement.append(column_element('x', 'Å'))
-        colsElement.append(column_element('y', 'Å'))
-        colsElement.append(column_element('z', 'Å'))
-        for column in self.additional_columns.all():
-            colsElement.append(column_element(column.name,
-                                    column.units, column.description))
 
         return cdbrecordElement
 
@@ -412,14 +382,6 @@ class CDBRecord(DataMixin):
         add_optional_kv(dbox, 'box-Y-orientation', self, 'box_Y_orientation')
         add_optional_kv(dbox, 'box-Z-orientation', self, 'box_Z_orientation')
         d['simulation-box'] = dbox
-
-        dcolumns = self.DEDICATED_COLUMNS.copy()  # This is being reused in serializer
-        for column in self.additional_columns.all():
-            dcolumn = {'name': column.name}
-            add_optional_kv(dcolumn, 'units', column)
-            add_optional_kv(dcolumn, 'description', column)
-            dcolumns.append(dcolumn)
-        d['columns'] = dcolumns
 
         d['code'] = {'name': self.code_name, 'version': self.code_version}
         d['archive-name'] = self.archive_name
