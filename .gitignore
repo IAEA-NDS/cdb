@@ -16,3 +16,4 @@ res/notes.txt
 DROPBOX_ACCESS_TOKEN
 .venv
 activate
+activate-dev
