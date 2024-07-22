@@ -17,3 +17,4 @@ DROPBOX_ACCESS_TOKEN
 .venv
 activate
 activate-dev
+activate-aws
